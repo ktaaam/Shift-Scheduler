@@ -1,0 +1,8 @@
+﻿#shift_table th{
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+#shift_table tbody td{
+    height:200px;
+}
