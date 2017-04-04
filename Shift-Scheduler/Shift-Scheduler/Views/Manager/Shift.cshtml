@@ -17,10 +17,21 @@
             <tr>
                 <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>            
             </tr>
+            <tr>
+                @foreach (string day in days)
+                {
+                    <th name="weekDay">
+                        @day.ToString()
+                    </th>
+                }
+            </tr>
         </thead>
         <tbody>
             @foreach (string shift in shifts)
             {
+                <tr>
+                    <td colspan="7" height="15">@shift.ToString()</td>
+                </tr>
                 <tr name="shift">
                     @foreach (string day in days)
                     {
