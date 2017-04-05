@@ -3,6 +3,12 @@
     text-align: center;
     line-height: 50px;
 }
-#shift_table tbody td{
+#shift_table tbody tr:nth-child(even){
     height:200px;
+}
+
+#shift_table tbody tr:nth-child(odd){
+    background-color: lightgray;
+    text-align: center;
+    height:20px;
 }
