@@ -1,8 +1,8 @@
 ﻿<ul class="nav nav-pills">
-    <li role="button" class="active"><a href="/Employee">Schedule</a></li>
-    <li role="button"><a href="#">Vacation Request</a></li>
-    <li role="button"><a href="#">Shift Change Request</a></li>
-    <li role="button"><a href="#">Employee Info</a></li>
+    <li role="button" id="inli"><a href="/Employee">Schedule</a></li>
+    <li role="button" id="vali"><a href="#">Vacation Request</a></li>
+    <li role="button" id="shli"><a href="#">Shift Change Request</a></li>
+    <li role="button" id="emli"><a href="#">Employee Info</a></li>
     <li role="presentation" class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             Clock <span class="caret"></span>
@@ -13,3 +13,7 @@
         </a>
     </li>
 </ul>
+
+<script type="text/javascript">
+$("#" + window.location.pathname.substring(10,12).toLowerCase() + "li").attr("class", "active");
+</script>
