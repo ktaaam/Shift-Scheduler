@@ -19,7 +19,9 @@ namespace Shift_Scheduler.Models
         public int phoneNumber { get; set; }
         public byte[] picture { get; set; }
         public string department { get; set; }
+
         public Shifts shift { get; set; }
+
         public virtual ICollection<Shifts> shifts { get; set; }
 
     }
