@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 
 namespace Shift_Scheduler.Models
@@ -9,6 +10,8 @@ namespace Shift_Scheduler.Models
         {
             this.shifts = new HashSet<Shifts>();
         }
+
+        [Key]
         public int employeeId { get; set; }
         public string userName { get; set; }
         public string passWord { get; set; }
@@ -20,14 +23,7 @@ namespace Shift_Scheduler.Models
         public byte[] picture { get; set; }
         public string department { get; set; }
 
-        public Shifts shift { get; set; }
-
         public virtual ICollection<Shifts> shifts { get; set; }
 
     }
-    public class EmployeeDBContext : DbContext
-    {
-        public DbSet<Employee> Employees { get; set; }
-    }
-
 }
