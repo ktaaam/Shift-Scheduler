@@ -7,10 +7,7 @@
 
     string[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     string[] shifts = { "Morning", "Evening", "Night" };
-
-    //int count = ViewBag.output.Length;
-    //int i = 0;
-}
+    }
 
 <h2>Shift Editor</h2>
 @using (Html.BeginForm())
@@ -39,12 +36,7 @@
                     @foreach (string day in days)
                     {
                         <td name="day">
-                            @{ 
-//if(count > i)
-//{
-//    ViewBag.output[i].toString();
-//}
-                            }
+                           @ViewBag.shifts[0].firstName;     
                         </td>
                     }
                 </tr>
