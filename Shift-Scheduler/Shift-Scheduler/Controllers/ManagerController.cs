@@ -19,15 +19,18 @@ namespace Shift_Scheduler.Models
         
         public ActionResult Shift()
         {
-            IQueryable<Employee>[] output = new IQueryable<Employee>[30];            
+            Employee[] output = new Employee[30];            
 
             int i = 0;
 
             foreach (var shift in db.Shifts)
             {                
-                output[0] = from e in db.Employees
-                            where e.shifts.Any(s => s.shiftId == shift.shiftId)
+                var res = from e in db.Employees
+                            from s in e.shifts
+                            where s.shiftId == shift.shiftId
                             select e;
+                output[i] = res.FirstOrDefault();              
+
                 i++;
             }
 
