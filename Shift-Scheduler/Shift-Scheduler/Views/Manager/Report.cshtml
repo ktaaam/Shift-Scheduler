@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Weekly Report";
+
+    DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
+    DateTime endOfWeek = startOfWeek.AddDays(6);
+
+    string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    string[] shifts = { "Morning", "Evening", "Night" };
+}
+
+<h2>Weekly Report</h2>
+
+<h3>Schedule</h3>
+<table class="table table-bordered" id="shift_table">
+    <thead>
+        <tr>
+            <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (string shift in shifts)
+        {
+            <tr name="shift">
+                @foreach (string day in days)
+                {
+                    <td name="day"></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Employee Hours Worked</h3>
+
+@section Styles{
+    <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
+}

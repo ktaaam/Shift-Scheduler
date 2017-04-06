@@ -161,6 +161,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShiftContext.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Models\Shifts.cs" />

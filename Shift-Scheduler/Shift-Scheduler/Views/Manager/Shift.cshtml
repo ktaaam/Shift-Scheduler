@@ -7,6 +7,9 @@
 
     string[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     string[] shifts = { "Morning", "Evening", "Night" };
+
+    //int count = ViewBag.output.Length;
+    //int i = 0;
 }
 
 <h2>Shift Editor</h2>
@@ -35,7 +38,14 @@
                 <tr name="shift">
                     @foreach (string day in days)
                     {
-                        <td name="day"></td>
+                        <td name="day">
+                            @{ 
+//if(count > i)
+//{
+//    ViewBag.output[i].toString();
+//}
+                            }
+                        </td>
                     }
                 </tr>
             }
