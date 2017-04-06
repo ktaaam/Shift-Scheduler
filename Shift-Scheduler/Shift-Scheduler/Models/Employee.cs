@@ -9,6 +9,8 @@ namespace Shift_Scheduler.Models
         public Employee()
         {
             this.shifts = new HashSet<Shifts>();
+
+            ShiftSchedules = new List<ShiftSchedule>();
         }
 
         [Key]
@@ -24,6 +26,8 @@ namespace Shift_Scheduler.Models
         public string department { get; set; }
 
         public virtual ICollection<Shifts> shifts { get; set; }
+
+        public virtual ICollection<ShiftSchedule> ShiftSchedules { get; set; }
 
     }
 }
