@@ -16,9 +16,12 @@ namespace Shift_Scheduler.Models
         }
         
         public ActionResult Shift()
-        {
-                        
+        {                       
+            return View();
+        }
 
+        public ActionResult Report()
+        {
             return View();
         }
     }
