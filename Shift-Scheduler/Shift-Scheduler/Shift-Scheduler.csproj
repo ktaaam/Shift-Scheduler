@@ -162,7 +162,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Employee_model.cs" />
-    <Compile Include="Models\ManagerController.cs" />
+    <Compile Include="Models\ShiftContext.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Models\Shifts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
