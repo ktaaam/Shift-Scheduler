@@ -7,7 +7,7 @@
 
     string[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     string[] shifts = { "Morning", "Evening", "Night" };
-}
+    }
 
 <h2>Shift Editor</h2>
 @using (Html.BeginForm())
@@ -35,7 +35,9 @@
                 <tr name="shift">
                     @foreach (string day in days)
                     {
-                        <td name="day"></td>
+                        <td name="day">
+                           @ViewBag.shifts[0].firstName;     
+                        </td>
                     }
                 </tr>
             }
