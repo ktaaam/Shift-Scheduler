@@ -69,9 +69,25 @@
                     success: function (data) {
                         console.log(data);
 
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i]['Value'].length > 0) {
+                                //console.log(data[i]['Key']);
+                                var emp = '<select class="custom-select">';
+                                for (var j = 0; j < data[i]['Value'].length; j++) {
 
+                                    emp += '<option value="' + data[i]['Value'][j]['Id'] + '">' + data[i]['Value'][j]['FirstName'] + ' ' + data[i]['Value'][j]['LastName'] + '</option>';
+                                }
+
+                                emp += '</select>';
+                            }
+                            else {
+                                var emp = '<select class="custom-select"></select>';                               
+                            }
+
+                            $('td[name=' + data[i]['Key'] + ']').append(emp);
+                        }
                     }
-                })
+                });
             });
         </script>
     }
