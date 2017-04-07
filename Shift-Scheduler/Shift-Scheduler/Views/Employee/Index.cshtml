@@ -8,8 +8,24 @@
     string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     string[] shifts = { "Morning", "Evening", "Night" };
 }
+<div class="container body-content">
+    <h2>Employee Shift</h2>
 
-<h2>Employee Shift</h2>
+    <ul class="nav nav-pills">
+        <li role="button" class="active"><a href="/Employee">Schedule</a></li>
+        <li role="button"><a href="#">Vacation Request</a></li>
+        <li role="button"><a href="#">Shift Change Request</a></li>
+        <li role="button"><a href="#">Employee Info</a></li>
+        <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Clock <span class="caret"></span>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Clock In</a></li>
+                    <li><a href="#">Clock Out</a></li>
+                </ul>
+            </a>
+        </li>
+    </ul>
 
 @{Html.RenderPartial("_navbar"); }
 
@@ -39,12 +55,25 @@
                     <td name="days[j]"></td>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (string shift in shifts)
+            {
+                <tr>
+                    <td colspan="7" height="15">@shift.ToString()</td>
+                </tr>
+                <tr name="shift">
+                    @foreach (string day in days)
+                {
+                        <td name="day"></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
-
-@section Styles{
-    <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
-}
+    @section Styles{
+        <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
+    }

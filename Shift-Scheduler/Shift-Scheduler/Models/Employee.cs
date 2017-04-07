@@ -40,6 +40,7 @@ namespace Shift_Scheduler.Models
 
         [DataType(DataType.PhoneNumber)]
         public int phoneNumber { get; set; }
+
         public byte[] picture { get; set; }
         public string department { get; set; }
 
