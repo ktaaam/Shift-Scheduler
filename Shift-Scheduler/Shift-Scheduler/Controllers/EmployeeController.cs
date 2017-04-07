@@ -9,7 +9,6 @@ namespace Shift_Scheduler.Controllers
 {
     public class EmployeeController : Controller
     {
-        private EmployeeDBContext db = new EmployeeDBContext();
 
         // GET: Employee
         public ActionResult Index()

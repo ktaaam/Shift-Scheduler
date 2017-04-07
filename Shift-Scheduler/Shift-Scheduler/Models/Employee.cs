@@ -13,12 +13,30 @@ namespace Shift_Scheduler.Models
 
         [Key]
         public int employeeId { get; set; }
+
+        [StringLength(60, MinimumLength = 6)]
+        [Required]
         public string userName { get; set; }
+
+        [DataType(DataType.Password)]
+        [Required]
+        [StringLength(60, MinimumLength = 6)]
         public string passWord { get; set; }
+
+        [StringLength(30, MinimumLength = 2)]
+        [Required]
         public string firstName { get; set; }
+
+        [StringLength(30, MinimumLength = 2)]
+        [Required]
         public string lastName { get; set; }
+
+        [StringLength(60, MinimumLength = 3)]
+        [Required]
         public string role { get; set; }
         public string address { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
         public int phoneNumber { get; set; }
         public byte[] picture { get; set; }
         public string department { get; set; }
