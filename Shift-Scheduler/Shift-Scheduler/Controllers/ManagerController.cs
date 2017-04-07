@@ -52,6 +52,7 @@ namespace Shift_Scheduler.Models
             }
 
             return Json(output, JsonRequestBehavior.AllowGet);
+
         }
         public ActionResult employeeList()
         { 

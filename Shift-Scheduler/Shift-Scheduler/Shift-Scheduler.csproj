@@ -199,11 +199,14 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\ShiftSchedule\" />
+<<<<<<< HEAD
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704070128457_init.resx">
       <DependentUpon>201704070128457_init.cs</DependentUpon>
     </EmbeddedResource>
+=======
+>>>>>>> 2f32812482a9c99d169b6991a474ebe7f91633ff
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
