@@ -9,7 +9,7 @@ namespace Shift_Scheduler.Models
 {
     public class ShiftSchedule
     {
-        
+
         [Key]
         public int shiftScheduleId { get; set; }
         public DateTime date { get; set; }
@@ -24,6 +24,6 @@ namespace Shift_Scheduler.Models
 
     }
 
-    
+
 
 }
