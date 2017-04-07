@@ -28,15 +28,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (string shift in shifts)
-            {
+        @for (int i = 0; i < shifts.Length; i++)
+        {
             <tr>
-                <td colspan="7" height="15">@shift.ToString()</td>
+                <td colspan="7" height="15">@shifts[i]</td>
             </tr>
             <tr name="shift">
-                @foreach (string day in days)
+                @for(int j = 0; j < days.Length; j++)
                 {
-                    <td name="day"></td>
+                    <td name="days[j]"></td>
                 }
             </tr>
         }
