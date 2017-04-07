@@ -13,7 +13,7 @@ namespace Shift_Scheduler.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201704070128457_init"; }
+            get { return "201704071023200_init"; }
         }
         
         string IMigrationMetadata.Source

@@ -59,6 +59,11 @@ namespace Shift_Scheduler.Models
             return View(db.Employees.ToList());
         }
 
+        public ActionResult dashBoard()
+        {
+            return View();
+        }
+
         public ActionResult Report()
         {
             return View();
