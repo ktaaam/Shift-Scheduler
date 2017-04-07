@@ -10,7 +10,9 @@ namespace Shift_Scheduler.Models
         {
             this.shifts = new HashSet<Shifts>();
 
-            ShiftSchedules = new List<ShiftSchedule>();
+            shiftSchedules = new List<ShiftSchedule>();
+
+            vacationRequests = new List<Vacation>();
         }
 
         [Key]
@@ -27,6 +29,7 @@ namespace Shift_Scheduler.Models
 
         public virtual ICollection<Shifts> shifts { get; set; }
 
-        public virtual ICollection<ShiftSchedule> ShiftSchedules { get; set; }
+        public virtual ICollection<ShiftSchedule> shiftSchedules { get; set; }
+        public virtual ICollection<Vacation> vacationRequests { get; set; }
     }
 }
