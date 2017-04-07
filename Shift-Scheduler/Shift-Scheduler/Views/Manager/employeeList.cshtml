@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Shift_Scheduler.Models.Employee>
+@{
+    ViewBag.Title = "employeeList";
+}
+
+<h2>Employee List</h2>
+<table class="table table-condensed">
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone Number</th>
+        <th>Role</th>
+        <th>Department</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <th>@Html.DisplayFor(modelItem => item.employeeId)</th>
+        <th>@Html.DisplayFor(modelItem => item.firstName)</th>
+        <th>@Html.DisplayFor(modelItem => item.lastName)</th>
+        <th>@Html.DisplayFor(modelItem => item.phoneNumber)</th>
+        <th>@Html.DisplayFor(modelItem => item.role)</th>
+        <th>@Html.DisplayFor(modelItem => item.department)</th>
+    </tr>
+    }
+</table>
+
