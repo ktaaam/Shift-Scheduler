@@ -28,6 +28,5 @@ namespace Shift_Scheduler.Models
         public virtual ICollection<Shifts> shifts { get; set; }
 
         public virtual ICollection<ShiftSchedule> ShiftSchedules { get; set; }
-
     }
 }
