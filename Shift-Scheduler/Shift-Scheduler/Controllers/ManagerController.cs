@@ -52,10 +52,16 @@ namespace Shift_Scheduler.Models
             }
 
             return Json(output, JsonRequestBehavior.AllowGet);
+
         }
         public ActionResult employeeList()
         { 
             return View(db.Employees.ToList());
+        }
+
+        public ActionResult dashBoard()
+        {
+            return View();
         }
 
         public ActionResult Report()

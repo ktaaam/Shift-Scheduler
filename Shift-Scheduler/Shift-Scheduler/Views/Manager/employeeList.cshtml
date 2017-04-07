@@ -3,26 +3,38 @@
     ViewBag.Title = "employeeList";
 }
 
-<h2>Employee List</h2>
-<table class="table table-condensed">
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Phone Number</th>
-        <th>Role</th>
-        <th>Department</th>
-    </tr>
-    @foreach (var item in Model)
-    {
-    <tr>
-        <th>@Html.DisplayFor(modelItem => item.employeeId)</th>
-        <th>@Html.DisplayFor(modelItem => item.firstName)</th>
-        <th>@Html.DisplayFor(modelItem => item.lastName)</th>
-        <th>@Html.DisplayFor(modelItem => item.phoneNumber)</th>
-        <th>@Html.DisplayFor(modelItem => item.role)</th>
-        <th>@Html.DisplayFor(modelItem => item.department)</th>
-    </tr>
+<div class="container body-content">
+    <h2>Employee List</h2>
+    <table class="table table-hover">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Role</th>
+            <th>Department</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.employeeId)</td>
+                <td>@Html.DisplayFor(modelItem => item.firstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.lastName)</td>
+                <td>@Html.DisplayFor(modelItem => item.phoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.role)</td>
+                <td>@Html.DisplayFor(modelItem => item.department)</td>
+            </tr>
+        }
+    </table>
+</div>
+    @section Styles{
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="~/Content/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="~/Scripts/bootstrap.min.js"></script>
     }
-</table>
 
