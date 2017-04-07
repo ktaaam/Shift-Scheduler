@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace Shift_Scheduler.Models
 {
@@ -31,28 +32,35 @@ namespace Shift_Scheduler.Models
         
         public ActionResult Shift()
         {
+            ViewBag.shift = db.Shifts.ToList();
+
             return View();
         }
 
         public JsonResult GetShifts()
         {
-            Employee[] output = new Employee[30];
+            //List<Employee> output = new List<Employee>();
 
-            int i = 0;
+            List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();          
 
             foreach (var shift in db.Shifts)
-            {
-                var res = from e in db.Employees
+            {   
+                var res = (from e in db.Employees
                           from s in e.shifts
                           where s.shiftId == shift.shiftId
-                          select e;
-                output[i] = res.FirstOrDefault();
+                          select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
 
-                i++;
+                List<ScheduleEmp> temp = new List<ScheduleEmp>();
+                foreach(var result in res)
+                {
+                    temp.Add(new ScheduleEmp ( result.employeeId, result.firstName, result.lastName, result.phoneNumber ));
+                }
+
+                output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId,temp));
             }
 
+            //var json = JsonConvert.SerializeObject(output);           
             return Json(output, JsonRequestBehavior.AllowGet);
-
         }
         public ActionResult employeeList()
         { 
@@ -67,6 +75,43 @@ namespace Shift_Scheduler.Models
         public ActionResult Report()
         {
             return View();
+        }
+    }
+
+    public class ScheduleEmp
+    {
+        private int id;
+        private string firstname;
+        private string lastname;
+        private string phone;
+
+        public ScheduleEmp(int id, string firstname, string lastname, string phone)
+        {
+            this.id = id;
+            this.firstname = firstname;
+            this.lastname = lastname;
+            this.phone = phone;
+        }
+
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+        public string FirstName
+        {
+            get { return firstname; }
+            set { firstname = value; }
+        }
+        public string LastName
+        {
+            get { return lastname; }
+            set { lastname = value; }
+        }
+        public string Phone
+        {
+            get { return phone; }
+            set { phone = value; }
         }
     }
 }
