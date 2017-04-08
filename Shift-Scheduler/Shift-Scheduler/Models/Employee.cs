@@ -38,8 +38,7 @@ namespace Shift_Scheduler.Models
         public string role { get; set; }
         public string address { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
-        public int phoneNumber { get; set; }
+        public string phoneNumber { get; set; }
 
         public byte[] picture { get; set; }
         public string department { get; set; }

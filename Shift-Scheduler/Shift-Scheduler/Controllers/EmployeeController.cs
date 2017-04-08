@@ -10,25 +10,43 @@ namespace Shift_Scheduler.Controllers
     public class EmployeeController : Controller
     {
         private Employee employee;
-        private string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-        private string[] shifts = { "Morning", "Evening", "Night" };
-
+        private ShiftContext db = new ShiftContext();
+        
+        
         // GET: Employee
         public ActionResult Index(int id = 0)
         {
-            this.employee = new Employee() { employeeId = 1, firstName = "Tim", lastName = "Bufont", userName = "TBufont" };
-            //SortedList<string, string> shifts = new SortedList<string, string>();
+            if (this.employee == null && id > 0)
+                this.employee = db.Employees.Find(id);
+            else
+                Redirect("/login");
 
-            //shifts.Add(new Shifts() { shiftId = "1", dayOfTheWeek = "Tuesday", shiftType = "Evening"});
-            //shifts.Add(new Shifts() { shiftId = "2", dayOfTheWeek = "Wednesday", shiftType = "Morning" });
-            //shifts.Add(new Shifts() { shiftId = "3", dayOfTheWeek = "Thursday", shiftType = "Evening" });
-            //shifts.Add(new Shifts() { shiftId = "4", dayOfTheWeek = "Saturday", shiftType = "Night" });
+            //ViewData["EmployeeShifts"] = employee.shifts.ToArray<Shifts>();
 
-            ViewData["Employee"] = employee;
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName ;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(int? id)
+        {
+            if (this.employee == null && id > 0)
+                this.employee = db.Employees.Find(id);
+            else
+                Redirect("/login");
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
+            return View(employee);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserProfile([Bind(Include = "employeeId,userName,firstName,lastName,role,address,phoneNumber,department")] Employee emp)
         {
             return View("UserProfile");
         }
@@ -41,6 +59,7 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult VacationRequest()
         {
+
             return View();
         }
 

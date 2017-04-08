@@ -179,11 +179,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704071023200_init.cs" />
-    <Compile Include="Migrations\201704071023200_init.Designer.cs">
-      <DependentUpon>201704071023200_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ShiftContext.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
@@ -219,11 +214,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\ShiftSchedule\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704071023200_init.resx">
-      <DependentUpon>201704071023200_init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
