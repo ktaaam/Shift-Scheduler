@@ -16,7 +16,7 @@ insert into Shifts values('TueNit','Tuesday','Night');
 
 insert into Shifts values('WedMor','Wednesday','Morning');
 insert into Shifts values('WedEve','Wednesday','Evening');
-insert into Shifts values('WedNit','Wednedsay','Night');
+insert into Shifts values('WedNit','Wednesday','Night');
 
 insert into Shifts values('ThuMor','Thursday','Morning');
 insert into Shifts values('ThuEve','Thursday','Evening');
