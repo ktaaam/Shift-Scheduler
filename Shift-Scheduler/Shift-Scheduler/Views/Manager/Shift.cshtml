@@ -10,8 +10,6 @@
 
 <div class="container body-content">
     <h2>Shift Editor</h2>
-    @using (Html.BeginForm())
-    {
         <table class="table table-bordered" id="shift_table">
             <thead>
                 <tr>
@@ -21,7 +19,7 @@
                 @foreach (string day in days)
                 {
                         <th name="weekDay">
-                            @day.ToString()
+                            @day.ToString();
                         </th>
                     }
                 </tr>
@@ -39,7 +37,7 @@
                         {
                             if (shiftName.shiftType == shift && shiftName.dayOfTheWeek == day)
                             {
-                                <td name="@shiftName.shiftId"></td>        
+                                <td name="@shiftName.shiftId" day ="@day"></td>        
                                 break;                        
                             }
                        }
@@ -49,8 +47,7 @@
             </tbody>
         </table>
 
-        <input type="submit" value="Save" />
-    }
+        <button id="updateTable" disabled>Save</button>
 
 </div>
 
@@ -67,11 +64,10 @@
                     url: '@Url.Action("GetShifts")',
                     datatype: 'json',
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
 
                         for (var i = 0; i < data.length; i++) {
                             if (data[i]['Value'].length > 0) {
-                                //console.log(data[i]['Key']);
                                 var emp = '<select class="custom-select">';
                                 for (var j = 0; j < data[i]['Value'].length; j++) {
 
@@ -86,7 +82,13 @@
 
                             $('td[name=' + data[i]['Key'] + ']').append(emp);
                         }
+
+                        $('#updateTable').prop('disabled', false);
                     }
+                });
+
+                $('#updateTable').click(function () {
+                    $('tbody')
                 });
             });
         </script>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 
 namespace Shift_Scheduler.Models
 {
@@ -38,9 +37,7 @@ namespace Shift_Scheduler.Models
         }
 
         public JsonResult GetShifts()
-        {
-            //List<Employee> output = new List<Employee>();
-
+        {            
             List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();          
 
             foreach (var shift in db.Shifts)
@@ -58,8 +55,7 @@ namespace Shift_Scheduler.Models
 
                 output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId,temp));
             }
-
-            //var json = JsonConvert.SerializeObject(output);           
+    
             return Json(output, JsonRequestBehavior.AllowGet);
         }
         public ActionResult employeeList()
