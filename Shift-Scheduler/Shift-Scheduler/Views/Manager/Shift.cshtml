@@ -37,7 +37,7 @@
                         {
                             if (shiftName.shiftType == shift && shiftName.dayOfTheWeek == day)
                             {
-                                <td name="@shiftName.shiftId" day ="@day"></td>        
+                                <td name="@shiftName.shiftId" class="shift_data"></td>        
                                 break;                        
                             }
                        }
@@ -46,8 +46,12 @@
                 }
             </tbody>
         </table>
-
+        <input type="hidden" value="@startOfWeek" id="startOfWeek"/>
         <button id="updateTable" disabled>Save</button>
+
+        <div id="warning" class="alert alert-danger" role="alert" hidden>
+            <strong>Warning</strong> Each shift must have at least one employee!
+        </div>
 
 </div>
 
@@ -88,7 +92,39 @@
                 });
 
                 $('#updateTable').click(function () {
-                    $('tbody')
+                    var scheduleArr = [];
+                    var flag = true;
+
+                    $('tbody').find('td[class="shift_data"]').each(function () {
+                        //console.log($('select', this).val());
+
+                        if ($('select', this).val() == null) {
+                            $('#warning').show().delay(3000).fadeOut();
+                            flag = false;
+                            return flag;
+                        }
+
+                        scheduleArr.push({
+                            empId: $('select', this).val(),
+                            shiftId: $(this).attr('name')
+                        })
+                    });
+
+                    if (flag) {
+                        $.ajax({
+                            type: 'POST',
+                            contentType: 'application/json; charset=utf-8',
+                            url: '@Url.Action("GetShifts")',
+                            datatype: 'json',
+                            data: {
+                                startdate: $('#startOfWeek').val(),
+                                data: scheduleArr
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    }
                 });
             });
         </script>
