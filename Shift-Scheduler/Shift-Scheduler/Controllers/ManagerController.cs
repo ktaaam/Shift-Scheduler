@@ -61,6 +61,22 @@ namespace Shift_Scheduler.Models
 
         public ActionResult dashBoard()
         {
+            int dateNumber=  (int)DateTime.Today.DayOfWeek;
+            string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            string dayOfTheWeek = "";
+            for(int i = 0; i < days.Length; i++)
+            {
+                if(dateNumber == i)
+                {
+                    dayOfTheWeek = days[i];
+                }
+            }
+            var res = from e in db.Employees
+                      from s in e.shifts
+                      where s.dayOfTheWeek == "Monday"
+                      select e;
+           
+            ViewBag.empAvail = res.ToList();
             return View();
         }
 
