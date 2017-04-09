@@ -49,8 +49,11 @@
         <input type="hidden" value="@startOfWeek" id="startOfWeek"/>
         <button id="updateTable" disabled>Save</button>
 
-        <div id="warning" class="alert alert-danger" role="alert" hidden>
+        <div id="warning" class="alert alert-warning" role="alert" hidden>
             <strong>Warning</strong> Each shift must have at least one employee!
+        </div>
+        <div id="error" class="alert alert-danger" role="alert" hidden>
+            <strong>Error</strong> Unable to process request at this time, try again later!
         </div>
 
 </div>
@@ -96,8 +99,6 @@
                     var flag = true;
 
                     $('tbody').find('td[class="shift_data"]').each(function () {
-                        //console.log($('select', this).val());
-
                         if ($('select', this).val() == null) {
                             $('#warning').show().delay(3000).fadeOut();
                             flag = false;
@@ -114,14 +115,19 @@
                         $.ajax({
                             type: 'POST',
                             contentType: 'application/json; charset=utf-8',
-                            url: '@Url.Action("GetShifts")',
+                            url: '@Url.Action("PostShifts")',
                             datatype: 'json',
-                            data: {
-                                startdate: $('#startOfWeek').val(),
-                                data: scheduleArr
-                            },
+                            data: JSON.stringify({
+                                "startDate": $('#startOfWeek').val(),
+                                "data": scheduleArr
+                            }),
                             success: function (data) {
-                                location.reload();
+                                if (data['success'] == 'success') {
+                                    location.reload();
+                                }
+                                else {
+                                    $('#error').show().delay(3000).fadeOut();
+                                }
                             }
                         });
                     }
