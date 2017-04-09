@@ -10,8 +10,6 @@
 
 <div class="container body-content">
     <h2>Shift Editor</h2>
-    @using (Html.BeginForm())
-    {
         <table class="table table-bordered" id="shift_table">
             <thead>
                 <tr>
@@ -21,7 +19,7 @@
                 @foreach (string day in days)
                 {
                         <th name="weekDay">
-                            @day.ToString()
+                            @day.ToString();
                         </th>
                     }
                 </tr>
@@ -39,7 +37,7 @@
                         {
                             if (shiftName.shiftType == shift && shiftName.dayOfTheWeek == day)
                             {
-                                <td name="@shiftName.shiftId"></td>        
+                                <td name="@shiftName.shiftId" class="shift_data"></td>        
                                 break;                        
                             }
                        }
@@ -48,9 +46,15 @@
                 }
             </tbody>
         </table>
+        <input type="hidden" value="@startOfWeek" id="startOfWeek"/>
+        <button id="updateTable" disabled>Save</button>
 
-        <input type="submit" value="Save" />
-    }
+        <div id="warning" class="alert alert-warning" role="alert" hidden>
+            <strong>Warning</strong> Each shift must have at least one employee!
+        </div>
+        <div id="error" class="alert alert-danger" role="alert" hidden>
+            <strong>Error</strong> Unable to process request at this time, try again later!
+        </div>
 
 </div>
 
@@ -67,11 +71,10 @@
                     url: '@Url.Action("GetShifts")',
                     datatype: 'json',
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
 
                         for (var i = 0; i < data.length; i++) {
                             if (data[i]['Value'].length > 0) {
-                                //console.log(data[i]['Key']);
                                 var emp = '<select class="custom-select">';
                                 for (var j = 0; j < data[i]['Value'].length; j++) {
 
@@ -86,6 +89,47 @@
 
                             $('td[name=' + data[i]['Key'] + ']').append(emp);
                         }
+
+                        $('#updateTable').prop('disabled', false);
+                    }
+                });
+
+                $('#updateTable').click(function () {
+                    var scheduleArr = [];
+                    var flag = true;
+
+                    $('tbody').find('td[class="shift_data"]').each(function () {
+                        if ($('select', this).val() == null) {
+                            $('#warning').show().delay(3000).fadeOut();
+                            flag = false;
+                            return flag;
+                        }
+
+                        scheduleArr.push({
+                            empId: $('select', this).val(),
+                            shiftId: $(this).attr('name')
+                        })
+                    });
+
+                    if (flag) {
+                        $.ajax({
+                            type: 'POST',
+                            contentType: 'application/json; charset=utf-8',
+                            url: '@Url.Action("PostShifts")',
+                            datatype: 'json',
+                            data: JSON.stringify({
+                                "startDate": $('#startOfWeek').val(),
+                                "data": scheduleArr
+                            }),
+                            success: function (data) {
+                                if (data['success'] == 'success') {
+                                    location.reload();
+                                }
+                                else {
+                                    $('#error').show().delay(3000).fadeOut();
+                                }
+                            }
+                        });
                     }
                 });
             });
