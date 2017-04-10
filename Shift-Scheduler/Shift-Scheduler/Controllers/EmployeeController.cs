@@ -16,30 +16,30 @@ namespace Shift_Scheduler.Controllers
         // GET: Employee
         public ActionResult Index(int id = 0)
         {
-            if (this.employee == null && id > 0)
+            if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                Redirect("/login");
+                return Redirect("/login");
 
-            //ViewData["EmployeeShifts"] = employee.shifts.ToArray<Shifts>();
+            ViewData["EmployeeShifts"] = employee.shifts.ToArray<Shifts>();
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName ;
+            ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult UserProfile(int? id)
         {
-            if (this.employee == null && id > 0)
+            if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                Redirect("/login");
+                return Redirect("/login");
             if (employee == null)
             {
                 return HttpNotFound();
             }
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
             return View(employee);
         }
@@ -59,14 +59,28 @@ namespace Shift_Scheduler.Controllers
             return View(employee);
         }
 
-        public ActionResult ShiftChangeRequest()
+        public ActionResult ShiftChangeRequest(int id = 0)
         {
+            if (id > 0)
+                this.employee = db.Employees.Find(id);
+            else
+                return Redirect("/login");
+
+            if (employee == null)
+                return HttpNotFound();
 
             return View();
         }
 
-        public ActionResult VacationRequest()
+        public ActionResult VacationRequest(int id = 0)
         {
+            if (id > 0)
+                this.employee = db.Employees.Find(id);
+            else
+                return Redirect("/login");
+
+            if (employee == null)
+                return HttpNotFound();
 
             return View();
         }
