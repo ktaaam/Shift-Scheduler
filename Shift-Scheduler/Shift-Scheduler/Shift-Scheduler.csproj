@@ -196,6 +196,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\_navbar.cshtml" />
+    <Content Include="Views\Employee\UserProfile.cshtml" />
     <Content Include="Views\Manager\employeeList.cshtml" />
     <Content Include="Views\Manager\Dashboard.cshtml" />
     <None Include="Web.Debug.config">
