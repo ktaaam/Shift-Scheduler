@@ -46,9 +46,17 @@ namespace Shift_Scheduler.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserProfile([Bind(Include = "employeeId,userName,firstName,lastName,role,address,phoneNumber,department")] Employee emp)
+        public ActionResult UserProfile([Bind(Include = "employeeId,userName,passWord,firstName,lastName,role,address,phoneNumber,department")] Employee emp)
         {
-            return View("UserProfile");
+            if (ModelState.IsValid)
+            {
+                db.Entry(emp).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
+            return View(employee);
         }
 
         public ActionResult ShiftChangeRequest()

@@ -15,9 +15,7 @@ namespace Shift_Scheduler.Models
         public DateTime date { get; set; }
         public string dayOfTheWeek { get; set; }
         public string shiftType { get; set; }
-
         public int empShiftScheduleID { get; set; }
-
         [ForeignKey("empShiftScheduleID")]
         public virtual Employee Employees { get; set; }
 
