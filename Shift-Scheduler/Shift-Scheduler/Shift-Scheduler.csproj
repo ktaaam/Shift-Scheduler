@@ -84,10 +84,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.dll</HintPath>
@@ -179,6 +175,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShiftChangeRequest.cs" />
     <Compile Include="Models\ShiftContext.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
@@ -200,6 +197,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\_navbar.cshtml" />
+    <Content Include="Views\Employee\UserProfile.cshtml" />
     <Content Include="Views\Manager\employeeList.cshtml" />
     <Content Include="Views\Manager\Dashboard.cshtml" />
     <None Include="Web.Debug.config">

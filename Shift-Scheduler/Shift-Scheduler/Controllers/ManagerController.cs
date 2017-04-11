@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 
 namespace Shift_Scheduler.Models
 {
@@ -11,6 +10,8 @@ namespace Shift_Scheduler.Models
     public class ManagerController : Controller
     {
         private ShiftContext db = new ShiftContext();
+
+        enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -38,9 +39,7 @@ namespace Shift_Scheduler.Models
         }
 
         public JsonResult GetShifts()
-        {
-            //List<Employee> output = new List<Employee>();
-
+        {            
             List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();          
 
             foreach (var shift in db.Shifts)
@@ -58,37 +57,82 @@ namespace Shift_Scheduler.Models
 
                 output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId,temp));
             }
-
-            //var json = JsonConvert.SerializeObject(output);           
+    
             return Json(output, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult PostShifts(string startDate, ShiftEmp[] data)
+        {
+            var shifts = (from s in db.Shifts
+                          select s.shiftId).ToList();
+
+            foreach(ShiftEmp shift in data)
+            {
+                if (shift.empId == null || !shifts.Contains(shift.shiftId))                
+                    return Json(new { error = "error" });                          
+                else
+                {
+                    var day = (from s in db.Shifts
+                                  where s.shiftId == shift.shiftId
+                                  select new { s.dayOfTheWeek, s.shiftType }).FirstOrDefault();
+
+                    Days dayval;
+                    if (Enum.TryParse(day.dayOfTheWeek, out dayval))
+                    {
+                        DateTime start;
+                        try
+                        {
+                            start = Convert.ToDateTime(startDate);
+                        }
+                        catch (FormatException)
+                        {
+                            return Json(new { error = "error" });
+                        }
+
+                        start.AddDays((int)dayval);
+
+                        var exist = (from s in db.ShiftSchedules
+                                     where s.date == start && s.shiftType == day.shiftType
+                                     select s).FirstOrDefault();
+
+                        int res;
+                        if (!Int32.TryParse(shift.empId, out res))
+                            return Json(new { error = "error" });
+
+                        if (exist != null)
+                        {
+                            exist.empShiftScheduleID = res;
+                            db.Entry(exist).State = System.Data.Entity.EntityState.Modified;
+
+                        }
+                        else
+                        {
+                            ShiftSchedule schedule = new ShiftSchedule();
+                            schedule.date = start;
+                            schedule.dayOfTheWeek = day.dayOfTheWeek;
+                            schedule.empShiftScheduleID = res;
+                            schedule.shiftType = day.shiftType;
+
+                            db.ShiftSchedules.Add(schedule);
+                        }
+
+                        db.SaveChanges();                        
+                    }
+                    else
+                    {
+                        return Json(new { error = "error" });
+                    }
+                }
+            }
+
+            return Json(new {success = "success" });
+        }
+
         public ActionResult employeeList()
         { 
             return View(db.Employees.ToList());
         }
-
-        //public String[] getDateMissing()
-        //{
-        //    string[] dayType = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
-        //                         "ThurMor", "ThurEve", "ThurNit", "FriMor", "FriEve", "FriNit", "SatMor", "SatEve", "SatNit",
-        //                         "SunMor", "SunEve", "SunNit", };
-
-        //    var res3 = (from s in db.Shifts
-        //                from e in s.employee
-        //                select new { s.shiftId, s.dayOfTheWeek, s }).ToArray();
-
-        //    for (int j = 0; j < res3.Length; j++)
-        //    {
-        //        string temp = res3[j].ToString();
-        //        temp = temp.Trim(new Char[] { '{', '}' });
-        //        String[] split = temp.Split(',');
-        //        shift id value
-        //       String[] split2 = split[0].Split(',');
-
-
-
-        //    }
-        //}
 
         public ActionResult dashBoard()
         {
@@ -182,6 +226,12 @@ namespace Shift_Scheduler.Models
         {
             return View();
         }
+    }
+
+    public class ShiftEmp
+    {
+        public string empId { get; set; }
+        public string shiftId { get; set; }
     }
 
     public class ScheduleEmp
