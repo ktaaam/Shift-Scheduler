@@ -134,29 +134,6 @@ namespace Shift_Scheduler.Models
             return View(db.Employees.ToList());
         }
 
-        //public String[] getDateMissing()
-        //{
-        //    string[] dayType = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
-        //                         "ThurMor", "ThurEve", "ThurNit", "FriMor", "FriEve", "FriNit", "SatMor", "SatEve", "SatNit",
-        //                         "SunMor", "SunEve", "SunNit", };
-
-        //    var res3 = (from s in db.Shifts
-        //                from e in s.employee
-        //                select new { s.shiftId, s.dayOfTheWeek, s }).ToArray();
-
-        //    for (int j = 0; j < res3.Length; j++)
-        //    {
-        //        string temp = res3[j].ToString();
-        //        temp = temp.Trim(new Char[] { '{', '}' });
-        //        String[] split = temp.Split(',');
-        //        shift id value
-        //       String[] split2 = split[0].Split(',');
-
-
-
-        //    }
-        //}
-
         public ActionResult dashBoard()
         {
             IQueryable<Shifts>[] output = new IQueryable<Shifts>[30];

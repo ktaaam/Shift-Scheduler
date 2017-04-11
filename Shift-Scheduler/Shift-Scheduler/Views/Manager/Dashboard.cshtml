@@ -68,34 +68,6 @@
                 }
             </tbody>
         </table>
-        
-            <h4 class="sub-header">Shift Change Request</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Phone Number</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var emp in ViewBag.empAvail)
-                        {
-                            <tr>
-                                <td>@emp.employeeId</td>
-                                <td>@emp.firstName</td>
-                                <td>@emp.lastName</td>
-                                <td>@emp.phoneNumber</td>
-                                <td>@emp.role</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        
     </div>
 
     <div class="col-xs-12 col-md-8">
@@ -126,6 +98,35 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="col-xs-6 col-md-4 rightbar img-rounded">
+        <h4 class="sub-header">Shift Change Request</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in ViewBag.empAvail)
+                    {
+                        <tr>
+                            <td>@emp.employeeId</td>
+                            <td>@emp.firstName</td>
+                            <td>@emp.lastName</td>
+                            <td>@emp.phoneNumber</td>
+                            <td>@emp.role</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
     </div>
     
 </div>
