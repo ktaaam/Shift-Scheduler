@@ -14,8 +14,11 @@ namespace Shift_Scheduler.Controllers
         // GET: ShiftSchedule
         public ActionResult Index()
         {
+
+            ViewBag.shift = db.ShiftSchedules.ToList();
+            ViewBag.employee = db.Employees.ToList();
             
-            return View(db.Employees.ToList());
+            return View(db.ShiftSchedules.ToList());
 
         }
 

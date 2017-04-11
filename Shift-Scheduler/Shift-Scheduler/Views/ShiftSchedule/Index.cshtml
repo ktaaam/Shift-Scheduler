@@ -1,11 +1,32 @@
-﻿
+﻿@model IEnumerable<Shift_Scheduler.Models.ShiftSchedule>
 @{
     ViewBag.Title = "Index";
+
+    DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
+    DateTime endOfWeek = startOfWeek.AddDays(6);
+
+    string[] dayOfTheWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 }
+
 
 <div class="container body-content">
     <h2>Employee List</h2>
     <table class="table table-hover">
+        <tr>
+            <th colspan="7">SHIFT SCHEDULE FOR: @startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
+        </tr>
+
+        <tr>
+            @foreach (string day in dayOfTheWeek)
+            {
+                <th name="weekDay">
+                    @day.ToString()
+                </th>
+            }
+        </tr>
+
+
+<!--
         <tr>
             <th>ID</th>
             <th>Date Start</th>
@@ -13,9 +34,16 @@
             <th>Employee ID</th>
             <th>Approval Status</th>
         </tr>
-
-        <tr>
-            <td>Suh dude</td>
-        </tr>
+-->
+        @foreach (var result in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => result.shiftScheduleId)</td>
+                <td>@Html.DisplayFor(modelItem => result.date)</td>
+                <td>@Html.DisplayFor(modelItem => result.dayOfTheWeek)</td>
+                <td>@Html.DisplayFor(modelItem => result.shiftType)</td>
+                <td>@Html.DisplayFor(modelItem => result.empShiftScheduleID)</td>
+            </tr>
+        }
     </table>
 </div>
