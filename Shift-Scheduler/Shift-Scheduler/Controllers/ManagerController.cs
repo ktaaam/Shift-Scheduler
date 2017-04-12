@@ -67,6 +67,8 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
+            //return Json(data);
+
             foreach(ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))                
@@ -90,7 +92,7 @@ namespace Shift_Scheduler.Models
                             return Json(new { error = "error" });
                         }
 
-                        start.AddDays((int)dayval);
+                        start = start.AddDays((int)dayval);
 
                         var exist = (from s in db.ShiftSchedules
                                      where s.date == start && s.shiftType == day.shiftType
@@ -247,7 +249,22 @@ namespace Shift_Scheduler.Models
 
         public ActionResult Report()
         {
+            ViewBag.shift = db.Shifts.ToList();
+
             return View();
+        }
+
+        public JsonResult GetShiftSchedule()
+        {
+            DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
+            DateTime endOfWeek = startOfWeek.AddDays(6);
+
+            var result = (from s in db.ShiftSchedules
+                          from e in db.Employees
+                          where s.date >= startOfWeek && s.date <= endOfWeek && s.empShiftScheduleID == e.employeeId
+                          select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName}).ToList();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 
