@@ -181,6 +181,7 @@
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Models\Shifts.cs" />
     <Compile Include="Models\ShiftSchedule.cs" />
+    <Compile Include="Models\Vacation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

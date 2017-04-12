@@ -47,5 +47,6 @@ namespace Shift_Scheduler.Models
 
         public virtual ICollection<ShiftSchedule> ShiftSchedules { get; set; }
         public virtual ICollection<ShiftChangeRequest> shiftChangeRequest { get; set; }
+        public virtual ICollection<Vacation> vacation { get; set; }
     }
 }

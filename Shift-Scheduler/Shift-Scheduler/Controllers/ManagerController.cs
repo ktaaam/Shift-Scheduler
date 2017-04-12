@@ -10,7 +10,7 @@ namespace Shift_Scheduler.Models
     public class ManagerController : Controller
     {
         private ShiftContext db = new ShiftContext();
-   
+
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
@@ -31,7 +31,7 @@ namespace Shift_Scheduler.Models
         {
             return View();
         }
-        
+
         public ActionResult Shift()
         {
             ViewBag.shift = db.Shifts.ToList();
@@ -40,25 +40,25 @@ namespace Shift_Scheduler.Models
         }
 
         public JsonResult GetShifts()
-        {            
-            List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();          
+        {
+            List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();
 
             foreach (var shift in db.Shifts)
-            {   
+            {
                 var res = (from e in db.Employees
-                          from s in e.shifts
-                          where s.shiftId == shift.shiftId
-                          select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
+                           from s in e.shifts
+                           where s.shiftId == shift.shiftId
+                           select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
 
                 List<ScheduleEmp> temp = new List<ScheduleEmp>();
-                foreach(var result in res)
+                foreach (var result in res)
                 {
-                    temp.Add(new ScheduleEmp ( result.employeeId, result.firstName, result.lastName, result.phoneNumber ));
+                    temp.Add(new ScheduleEmp(result.employeeId, result.firstName, result.lastName, result.phoneNumber));
                 }
 
-                output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId,temp));
+                output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId, temp));
             }
-    
+
             return Json(output, JsonRequestBehavior.AllowGet);
         }
 
@@ -68,15 +68,15 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
-            foreach(ShiftEmp shift in data)
+            foreach (ShiftEmp shift in data)
             {
-                if (shift.empId == null || !shifts.Contains(shift.shiftId))                
-                    return Json(new { error = "error" });                          
+                if (shift.empId == null || !shifts.Contains(shift.shiftId))
+                    return Json(new { error = "error" });
                 else
                 {
                     var day = (from s in db.Shifts
-                                  where s.shiftId == shift.shiftId
-                                  select new { s.dayOfTheWeek, s.shiftType }).FirstOrDefault();
+                               where s.shiftId == shift.shiftId
+                               select new { s.dayOfTheWeek, s.shiftType }).FirstOrDefault();
 
                     Days dayval;
                     if (Enum.TryParse(day.dayOfTheWeek, out dayval))
@@ -118,7 +118,7 @@ namespace Shift_Scheduler.Models
                             db.ShiftSchedules.Add(schedule);
                         }
 
-                        db.SaveChanges();                        
+                        db.SaveChanges();
                     }
                     else
                     {
@@ -127,27 +127,27 @@ namespace Shift_Scheduler.Models
                 }
             }
 
-            return Json(new {success = "success" });
+            return Json(new { success = "success" });
         }
 
         public ActionResult employeeList()
-        { 
+        {
             return View(db.Employees.ToList());
         }
 
         public ActionResult dashBoard()
         {
             IQueryable<Shifts>[] output = new IQueryable<Shifts>[30];
-            int dateNumber=  (int)DateTime.Today.DayOfWeek;
+            int dateNumber = (int)DateTime.Today.DayOfWeek;
             string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             string[] dayId = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
                                  "ThurMor", "ThuEve", "ThuNit", "FriMor", "FriEve", "FriNit", "SatMor", "SatEve", "SatNit",
                                  "SunMor", "SunEve", "SunNit" };
             string[] dayType = { "Morning", "Evening", "Night" };
             string dayOfTheWeek = "";
-            for(int i = 0; i < days.Length; i++)
+            for (int i = 0; i < days.Length; i++)
             {
-                if(dateNumber == i)
+                if (dateNumber == i)
                 {
                     dayOfTheWeek = days[i];
                 }
@@ -156,10 +156,10 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-         
+
             var res2 = (from s in db.Shifts
                         from e in s.employee
-                        select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
+                        select new { s.shiftId, s.dayOfTheWeek, s.shiftType }).ToArray();
 
             for (int j = 0; j < res2.Length; j++)
             {
@@ -175,10 +175,10 @@ namespace Shift_Scheduler.Models
 
                 string dayWeek = day[1].Trim();
                 string sType = type[1].Trim();
-                
+
                 string deleteId = "";
 
-                for(int k = 0; k < days.Length; k++)
+                for (int k = 0; k < days.Length; k++)
                 {
                     int offset = 0;
                     if (dayWeek == days[k])
@@ -188,9 +188,9 @@ namespace Shift_Scheduler.Models
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
-                        for(int l = 0; l < dayType.Length; l++)
+                        for (int l = 0; l < dayType.Length; l++)
                         {
-                            if(type[1] == dayType[l])
+                            if (type[1] == dayType[l])
                             {
                                 //offset for dayId
                                 offset = l;
@@ -201,11 +201,11 @@ namespace Shift_Scheduler.Models
                                 dayType = typeShift.ToArray();
                             }
                         }
-                        
-                        
-                        for(; offset < dayId.Length;)
+
+
+                        for (; offset < dayId.Length;)
                         {
-                            if(deleteId == dayId[offset])
+                            if (deleteId == dayId[offset])
                             {
                                 List<string> tempId = dayId.OfType<string>().ToList();
                                 tempId.RemoveAt(offset);
@@ -216,12 +216,34 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
-            //foreach(var shiftChange in db.shiftChangeRequest)
-            //{
 
-            //}
+            var res3 = (from v in db.vacation
+                        select new { v.vacationId, v.startDate, v.endDate, v.employeeId }).ToArray();
+            List<String> vacay = new List<String>();
+            for (int r = 0; r < res3.Length; r++)
+            {
+                string temp = res3[r].ToString();
+                temp = temp.Trim(new Char[] { '{', '}' });
+                String[] split = temp.Split(',');
 
-            var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
+                String[] vacationID = split[0].Split('=');
+                // vacation start date
+                String[] startDate = split[1].Split('=');
+                // vacation end date
+                String[] endDate = split[2].Split('=');
+                String[] employeeId = split[3].Split('=');
+
+                string vId = vacationID[1].Trim();
+                string start = startDate[1].Trim();
+                string end = endDate[1].Trim();
+                string empId = employeeId[1].Trim();
+
+                vacay.Add(vId);
+                vacay.Add(start);
+                vacay.Add(end);
+                vacay.Add(empId);
+            }
+            ViewBag.vacation = vacay;
 
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
