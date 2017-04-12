@@ -16,6 +16,7 @@ namespace Shift_Scheduler.Models
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<ShiftSchedule> ShiftSchedules { get; set; }
+        public DbSet<Vacation> VacationRequests { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
