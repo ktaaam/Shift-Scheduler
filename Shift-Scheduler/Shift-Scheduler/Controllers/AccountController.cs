@@ -84,7 +84,10 @@ namespace Shift_Scheduler.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    
+
+                    Session["EmpId"] = from e in context.Employees
+                                   where e.userName == model.Username
+                                   select e.employeeId;
 
                     if (User.IsInRole("Manager"))
                     {
@@ -165,7 +168,8 @@ namespace Shift_Scheduler.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Username };
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Username, employee = new Employee { userName = model.Username, passWord = model.Password} };
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

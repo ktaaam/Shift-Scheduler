@@ -24,7 +24,7 @@ namespace Shift_Scheduler.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var Roles = context.Roles.ToList();
+            //var Roles = context.Roles.ToList();
             return View(Roles);
         }
 
