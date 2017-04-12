@@ -218,12 +218,6 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
-            //foreach(var shiftChange in db.shiftChangeRequest)
-            //{
-
-            //}
-
-            //var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
 
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
@@ -255,6 +249,33 @@ namespace Shift_Scheduler.Models
         {
             return View();
         }
+
+        public JsonResult GetShiftChange()
+        {
+            var res = (from c in db.shiftChangeRequest
+                       from s in db.ShiftSchedules
+                       from e in db.Employees
+                       where c.shiftScheduleID == s.shiftScheduleId && c.newWorkingEmp.employeeId == e.employeeId && c.shiftApproval == "pending"
+                       select new shiftChangeEmp { id = c.shiftChangeRequestId, date = s.date, shiftType = s.shiftType, curFirstName = c.currentWorkingEmp.firstName, curLastName = c.currentWorkingEmp.lastName, newFirstName =  e.firstName, newLastName = e.lastName}).ToList();
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RequestApprove(int id)
+        {
+            return Json(new { success = id }, JsonRequestBehavior.AllowGet);
+        }
+    }
+
+    public class shiftChangeEmp
+    {
+        public int id { get; set; }
+        public DateTime date { get; set; }
+        public string shiftType { get; set; }
+        public string curFirstName { get; set; }
+        public string curLastName { get; set; }
+        public string newFirstName { get; set; }
+        public string newLastName { get; set; }
     }
 
     public class ShiftEmp
