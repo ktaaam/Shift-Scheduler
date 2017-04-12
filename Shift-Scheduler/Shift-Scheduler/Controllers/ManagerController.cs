@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -261,11 +262,44 @@ namespace Shift_Scheduler.Models
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RequestApprove(int id)
+        public ActionResult RequestApprove(int id)
         {
-            return Json(new { success = id }, JsonRequestBehavior.AllowGet);
+            var res = (from c in db.shiftChangeRequest
+                      where c.shiftChangeRequestId == id
+                      select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "approved";
+                var result = (from s in db.ShiftSchedules
+                              where res.shiftScheduleID == s.shiftScheduleId
+                              select s).FirstOrDefault();
+
+                result.empShiftScheduleID = res.newWorkingEmp.employeeId;
+
+                db.Entry(result).State = EntityState.Modified;
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
         }
-    }
+
+        public ActionResult RequestDeny(int id)
+        {
+            var res = (from c in db.shiftChangeRequest
+                       where c.shiftChangeRequestId == id
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "denied";                
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
+        }
 
     public class shiftChangeEmp
     {
