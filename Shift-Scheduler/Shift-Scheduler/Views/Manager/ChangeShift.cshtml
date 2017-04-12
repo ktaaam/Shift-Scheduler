@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Shift_Scheduler.Models.ShiftChangeRequest>
+
+@{
+    ViewBag.Title = "ChangeShift";
+}
+
+<h2>ChangeShift</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.shiftSchedule.dayOfTheWeek)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.shiftApproval)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.currentWorkingEmpId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.newWorkingEmpId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.shiftSchedule.dayOfTheWeek)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shiftApproval)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.currentWorkingEmpId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.newWorkingEmpId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.shiftChangeRequestId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.shiftChangeRequestId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.shiftChangeRequestId })
+        </td>
+    </tr>
+}
+
+</table>
