@@ -1,51 +1,50 @@
-﻿@model IEnumerable<Shift_Scheduler.Models.ShiftChangeRequest>
-
-@{
+﻿@{
     ViewBag.Title = "ChangeShift";
 }
+<div class="container body-content">
+    <h2>ChangeShift</h2>
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Shift Type
+            </th>
+            <th>Currently Scheduled Employee</th>
+            <th>
+                Desired Employee
+            </th>
+            <th>
+                Approval
+            </th>
+        </tr>       
+    </table>
+    </div>
 
-<h2>ChangeShift</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.shiftSchedule.dayOfTheWeek)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.shiftApproval)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.currentWorkingEmpId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.newWorkingEmpId)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.shiftSchedule.dayOfTheWeek)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.shiftApproval)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.currentWorkingEmpId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.newWorkingEmpId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.shiftChangeRequestId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.shiftChangeRequestId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.shiftChangeRequestId })
-        </td>
-    </tr>
-}
-
-</table>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '@Url.Action("GetShiftChange")',
+                datatype: 'json',
+                success: function (data) {
+                    console.log(data);
+                    var str;
+                    for (var i = 0; i < data.length; i++) {
+                        str += '<tr>';
+                        str += '<td>' + new Date(parseInt(data[i]['date'].substr(6))) + '</td>';
+                        str += '<td>' + data[i]['shiftType'] + '</td>';
+                        str += '<td>' + data[i]['curFirstName'] + ' ' + data[i]['curLastName'] + '</td>';
+                        str += '<td>' + data[i]['newFirstName'] + ' ' + data[i]['newLastName'] + '</td>';
+                        str += '<td>' + '<button><a href="/Manager/RequestApprove?id=' + data[i]['id'] + '">Approve</a></button><button><a href="/Manager/RequestDeny?id=' + data[i]['id'] + '">Deny</a></button>' + '</td>';
+                        str += '</tr>';
+                    }
+                    $('table').append(str);
+                }
+            });
+        });
+    </script>
+    }
