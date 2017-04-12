@@ -84,6 +84,8 @@ namespace Shift_Scheduler.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    
+
                     if (User.IsInRole("Manager"))
                     {
                         return RedirectToAction("Dashboard", "Manager");
