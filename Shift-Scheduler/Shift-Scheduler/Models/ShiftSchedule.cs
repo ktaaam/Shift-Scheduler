@@ -9,7 +9,7 @@ namespace Shift_Scheduler.Models
 {
     public class ShiftSchedule
     {
-
+        
         [Key]
         public int shiftScheduleId { get; set; }
         public DateTime date { get; set; }
@@ -18,6 +18,7 @@ namespace Shift_Scheduler.Models
         public int empShiftScheduleID { get; set; }
         [ForeignKey("empShiftScheduleID")]
         public virtual Employee Employees { get; set; }
+
 
 
     }

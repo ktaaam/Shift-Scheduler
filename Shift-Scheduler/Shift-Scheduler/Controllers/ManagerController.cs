@@ -10,6 +10,7 @@ namespace Shift_Scheduler.Models
     public class ManagerController : Controller
     {
         private ShiftContext db = new ShiftContext();
+   
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
@@ -67,6 +68,8 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
+            //return Json(data);
+
             foreach(ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))                
@@ -90,7 +93,7 @@ namespace Shift_Scheduler.Models
                             return Json(new { error = "error" });
                         }
 
-                        start.AddDays((int)dayval);
+                        start = start.AddDays((int)dayval);
 
                         var exist = (from s in db.ShiftSchedules
                                      where s.date == start && s.shiftType == day.shiftType
@@ -134,29 +137,6 @@ namespace Shift_Scheduler.Models
             return View(db.Employees.ToList());
         }
 
-        //public String[] getDateMissing()
-        //{
-        //    string[] dayType = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
-        //                         "ThurMor", "ThurEve", "ThurNit", "FriMor", "FriEve", "FriNit", "SatMor", "SatEve", "SatNit",
-        //                         "SunMor", "SunEve", "SunNit", };
-
-        //    var res3 = (from s in db.Shifts
-        //                from e in s.employee
-        //                select new { s.shiftId, s.dayOfTheWeek, s }).ToArray();
-
-        //    for (int j = 0; j < res3.Length; j++)
-        //    {
-        //        string temp = res3[j].ToString();
-        //        temp = temp.Trim(new Char[] { '{', '}' });
-        //        String[] split = temp.Split(',');
-        //        shift id value
-        //       String[] split2 = split[0].Split(',');
-
-
-
-        //    }
-        //}
-
         public ActionResult dashBoard()
         {
             IQueryable<Shifts>[] output = new IQueryable<Shifts>[30];
@@ -178,15 +158,14 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-          
-      
-                var res3 = (from s in db.Shifts
-                           from e in s.employee
-                           select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
+         
+            var res2 = (from s in db.Shifts
+                        from e in s.employee
+                        select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
 
-            for (int j = 0; j < res3.Length; j++)
+            for (int j = 0; j < res2.Length; j++)
             {
-                string temp = res3[j].ToString();
+                string temp = res2[j].ToString();
                 temp = temp.Trim(new Char[] { '{', '}' });
                 String[] split = temp.Split(',');
                 // shift id value
@@ -207,7 +186,7 @@ namespace Shift_Scheduler.Models
                     if (dayWeek == days[k])
                     {
                         deleteId = days[k].Substring(0, 3);
-                        days[k] = null;
+                        //days[k] = null;
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
@@ -239,6 +218,13 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
+            //foreach(var shiftChange in db.shiftChangeRequest)
+            //{
+
+            //}
+
+            //var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
+
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
             ViewBag.empAvail = res.ToList();
@@ -246,6 +232,26 @@ namespace Shift_Scheduler.Models
         }
 
         public ActionResult Report()
+        {
+            ViewBag.shift = db.Shifts.ToList();
+
+            return View();
+        }
+
+        public JsonResult GetShiftSchedule()
+        {
+            DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
+            DateTime endOfWeek = startOfWeek.AddDays(6);
+
+            var result = (from s in db.ShiftSchedules
+                          from e in db.Employees
+                          where s.date >= startOfWeek && s.date <= endOfWeek && s.empShiftScheduleID == e.employeeId
+                          select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName}).ToList();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ChangeShift()
         {
             return View();
         }

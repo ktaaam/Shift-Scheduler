@@ -8,31 +8,60 @@
     string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     string[] shifts = { "Morning", "Evening", "Night" };
 }
+<div class="container body-content">
+    <h2>Weekly Report</h2>
 
-<h2>Weekly Report</h2>
-
-<h3>Schedule</h3>
-<table class="table table-bordered" id="shift_table">
-    <thead>
-        <tr>
-            <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (string shift in shifts)
-        {
-            <tr name="shift">
+    <h3>Schedule</h3>
+    <table class="table table-bordered" id="shift_table">
+        <thead>
+            <tr>
+                <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (string shift in shifts)
+            {   
+                <tr><td colspan="7">@shift</td></tr>
+                <tr name="@shift">
                 @foreach (string day in days)
                 {
-                    <td name="day"></td>
+                    foreach (var shiftName in ViewBag.shift)
+                    {
+                        if (shiftName.shiftType == shift && shiftName.dayOfTheWeek == day)
+                        {
+                            <td name="@shiftName.dayOfTheWeek" class="shift_data"></td>
+                            break;
+                        }
+                    }
                 }
-            </tr>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Employee Hours Worked</h3>
+
+    </div>
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    url: '@Url.Action("GetShiftSchedule")',
+                    datatype: 'json',
+                    success: function (data) {
+                        console.log(data);
+
+                        for (var i = 0; i < data.length; i++) {
+                            $('tr[name="' + data[i]['shiftType'] + '"]>td[name="' + data[i]['dayOfTheWeek'] + '"]').append(data[i]['firstName'] + ' ' + data[i]['lastName']);
+                        }
+                    }
+                });
+            });
+        </script>
         }
-    </tbody>
-</table>
 
-<h3>Employee Hours Worked</h3>
-
-@section Styles{
-    <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
-}
+    @section Styles{
+        <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
+    }

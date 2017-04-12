@@ -19,7 +19,7 @@ namespace Shift_Scheduler.Models
         public string shiftId { get; set; }
         public string dayOfTheWeek { get; set; }
         public string shiftType { get; set; }
-
         public virtual ICollection<Employee> employee { get; set; }
+
     } 
 }
