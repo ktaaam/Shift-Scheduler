@@ -14,12 +14,13 @@ namespace Shift_Scheduler.Controllers
         
         
         // GET: Employee
-        public ActionResult Index(int id = 0)
+        public ActionResult Index()
         {
-            if (id > 0)
-                this.employee = db.Employees.Find(id);
+            Session["EmpId"] = 1;
+            if (Session["EmpId"] != null)
+                this.employee = db.Employees.Find(Session["EmpId"]);
             else
-                return RedirectToAction("Account","login");
+                return RedirectToAction("Login","Account");
 
             
 
@@ -32,11 +33,11 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult UserProfile(int? id)
         {
-            if (id > 0)
-                this.employee = db.Employees.Find(id);
+            if (Session["EmpId"] != null)
+                this.employee = db.Employees.Find(Session["EmpId"]);
             else
-                return Redirect("/login");
-            
+                return RedirectToAction("Login","Account");
+
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
@@ -58,36 +59,35 @@ namespace Shift_Scheduler.Controllers
             return View(employee);
         }
 
-        public ActionResult ShiftChangeRequest(int id, string shiftId)
+        public ActionResult ShiftChangeRequest(string shiftId)
         {
-            if (id > 0)
-                this.employee = db.Employees.Find(id);
+            if(Session["EmpId"] != null)
+                this.employee = db.Employees.Find(Session["EmpId"]);
             else
-                return Redirect("/login");
+                return RedirectToAction("Login","Account");
+
+            ShiftSchedule shiftToChange = db.ShiftSchedules.Find(shiftId);
 
             var res = from e in db.Employees
-                      from s in e.shifts
-                      where s.shiftId == shiftId
-                      select s;
-
-            var res2 = from e in db.Employees
                        from s in e.shifts
-                       where s.dayOfTheWeek != db.ShiftSchedules.Find(shiftId).dayOfTheWeek
+                       where s.dayOfTheWeek != shiftToChange.dayOfTheWeek
                        select e;
 
 
-
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            
+            ViewData["ShiftToChange"] = shiftToChange;
+            ViewData["EmpAvailable"] = res.ToList();
+            ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult VacationRequest(int id = 0)
         {
-            if (id > 0)
-                this.employee = db.Employees.Find(id);
+            if (Session["EmpId"] != null)
+                this.employee = db.Employees.Find(Session["EmpId"]);
             else
-                return Redirect("/login");
+                return RedirectToAction("Login","Account");
 
             if (employee == null)
                 return HttpNotFound();
