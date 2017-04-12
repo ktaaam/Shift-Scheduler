@@ -13,6 +13,11 @@
 
     @{Html.RenderPartial("_navbar"); }
 
+    @foreach (string shift in (List<string>)ViewData["EmpShifts"])
+    {
+        <p>shift</p>
+    }
+
 <table class="table table-bordered" id="shift_table">
     <thead>
         <tr>

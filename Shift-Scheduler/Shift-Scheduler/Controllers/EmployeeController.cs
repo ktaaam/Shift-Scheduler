@@ -21,7 +21,21 @@ namespace Shift_Scheduler.Controllers
             else
                 return Redirect("/login");
 
-            ViewData["EmployeeShifts"] = employee.shifts.ToArray<Shifts>();
+            List<string> empShifts = new List<string>();
+
+            foreach(Shifts shift in employee.shifts)
+            {
+                empShifts.Add(shift.dayOfTheWeek + " " + shift.shiftType);
+            }
+
+            List<string> empShiftSchedule = new List<string>();
+
+            foreach (ShiftSchedule shift in employee.ShiftSchedules)
+            {
+                empShifts.Add(shift.dayOfTheWeek + " " + shift.shiftType);
+            }
+
+            ViewData["EmpShifts"] = empShiftSchedule;
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
@@ -34,10 +48,7 @@ namespace Shift_Scheduler.Controllers
                 this.employee = db.Employees.Find(id);
             else
                 return Redirect("/login");
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
+            
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
@@ -69,6 +80,8 @@ namespace Shift_Scheduler.Controllers
             if (employee == null)
                 return HttpNotFound();
 
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
@@ -82,16 +95,24 @@ namespace Shift_Scheduler.Controllers
             if (employee == null)
                 return HttpNotFound();
 
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult ClockIn(int id)
         {
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult ClockOut(int id)
         {
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
     }
