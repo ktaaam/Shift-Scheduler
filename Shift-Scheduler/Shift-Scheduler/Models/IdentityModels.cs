@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace Shift_Scheduler.Models
 {
@@ -26,6 +27,15 @@ namespace Shift_Scheduler.Models
             : base("defaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<Shifts> Shifts { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+
+        public DbSet<ShiftSchedule> ShiftSchedules { get; set; }
+
+        public DbSet<Vacation> VacationRequests { get; set; }
+
+        public DbSet<ShiftChangeRequest> shiftChangeRequest { get; set; }
 
         public static ApplicationDbContext Create()
         {
