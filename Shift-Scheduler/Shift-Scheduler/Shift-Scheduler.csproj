@@ -200,6 +200,7 @@
     <Content Include="Views\Employee\UserProfile.cshtml" />
     <Content Include="Views\Manager\employeeList.cshtml" />
     <Content Include="Views\Manager\Dashboard.cshtml" />
+    <Content Include="Views\Manager\Report.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
