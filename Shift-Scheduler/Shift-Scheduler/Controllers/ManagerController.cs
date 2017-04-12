@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,8 +10,8 @@ namespace Shift_Scheduler.Models
     // todo: only allow manager
     public class ManagerController : Controller
     {
-        private ShiftContext db = new ShiftContext();
-   
+        private ApplicationDbContext db = new ApplicationDbContext();
+
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
@@ -31,7 +32,7 @@ namespace Shift_Scheduler.Models
         {
             return View();
         }
-        
+
         public ActionResult Shift()
         {
             ViewBag.shift = db.Shifts.ToList();
@@ -40,25 +41,25 @@ namespace Shift_Scheduler.Models
         }
 
         public JsonResult GetShifts()
-        {            
-            List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();          
+        {
+            List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();
 
             foreach (var shift in db.Shifts)
-            {   
+            {
                 var res = (from e in db.Employees
-                          from s in e.shifts
-                          where s.shiftId == shift.shiftId
-                          select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
+                           from s in e.shifts
+                           where s.shiftId == shift.shiftId
+                           select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
 
                 List<ScheduleEmp> temp = new List<ScheduleEmp>();
-                foreach(var result in res)
+                foreach (var result in res)
                 {
-                    temp.Add(new ScheduleEmp ( result.employeeId, result.firstName, result.lastName, result.phoneNumber ));
+                    temp.Add(new ScheduleEmp(result.employeeId, result.firstName, result.lastName, result.phoneNumber));
                 }
 
-                output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId,temp));
+                output.Add(new KeyValuePair<string, List<ScheduleEmp>>(shift.shiftId, temp));
             }
-    
+
             return Json(output, JsonRequestBehavior.AllowGet);
         }
 
@@ -70,15 +71,15 @@ namespace Shift_Scheduler.Models
 
             //return Json(data);
 
-            foreach(ShiftEmp shift in data)
+            foreach (ShiftEmp shift in data)
             {
-                if (shift.empId == null || !shifts.Contains(shift.shiftId))                
-                    return Json(new { error = "error" });                          
+                if (shift.empId == null || !shifts.Contains(shift.shiftId))
+                    return Json(new { error = "error" });
                 else
                 {
                     var day = (from s in db.Shifts
-                                  where s.shiftId == shift.shiftId
-                                  select new { s.dayOfTheWeek, s.shiftType }).FirstOrDefault();
+                               where s.shiftId == shift.shiftId
+                               select new { s.dayOfTheWeek, s.shiftType }).FirstOrDefault();
 
                     Days dayval;
                     if (Enum.TryParse(day.dayOfTheWeek, out dayval))
@@ -120,7 +121,7 @@ namespace Shift_Scheduler.Models
                             db.ShiftSchedules.Add(schedule);
                         }
 
-                        db.SaveChanges();                        
+                        db.SaveChanges();
                     }
                     else
                     {
@@ -129,27 +130,27 @@ namespace Shift_Scheduler.Models
                 }
             }
 
-            return Json(new {success = "success" });
+            return Json(new { success = "success" });
         }
 
         public ActionResult employeeList()
-        { 
+        {
             return View(db.Employees.ToList());
         }
 
         public ActionResult dashBoard()
         {
             IQueryable<Shifts>[] output = new IQueryable<Shifts>[30];
-            int dateNumber=  (int)DateTime.Today.DayOfWeek;
+            int dateNumber = (int)DateTime.Today.DayOfWeek;
             string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             string[] dayId = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
                                  "ThurMor", "ThuEve", "ThuNit", "FriMor", "FriEve", "FriNit", "SatMor", "SatEve", "SatNit",
                                  "SunMor", "SunEve", "SunNit" };
             string[] dayType = { "Morning", "Evening", "Night" };
             string dayOfTheWeek = "";
-            for(int i = 0; i < days.Length; i++)
+            for (int i = 0; i < days.Length; i++)
             {
-                if(dateNumber == i)
+                if (dateNumber == i)
                 {
                     dayOfTheWeek = days[i];
                 }
@@ -158,10 +159,10 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-         
+
             var res2 = (from s in db.Shifts
                         from e in s.employee
-                        select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
+                        select new { s.shiftId, s.dayOfTheWeek, s.shiftType }).ToArray();
 
             for (int j = 0; j < res2.Length; j++)
             {
@@ -177,10 +178,10 @@ namespace Shift_Scheduler.Models
 
                 string dayWeek = day[1].Trim();
                 string sType = type[1].Trim();
-                
+
                 string deleteId = "";
 
-                for(int k = 0; k < days.Length; k++)
+                for (int k = 0; k < days.Length; k++)
                 {
                     int offset = 0;
                     if (dayWeek == days[k])
@@ -190,9 +191,9 @@ namespace Shift_Scheduler.Models
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
-                        for(int l = 0; l < dayType.Length; l++)
+                        for (int l = 0; l < dayType.Length; l++)
                         {
-                            if(type[1] == dayType[l])
+                            if (type[1] == dayType[l])
                             {
                                 //offset for dayId
                                 offset = l;
@@ -203,11 +204,11 @@ namespace Shift_Scheduler.Models
                                 dayType = typeShift.ToArray();
                             }
                         }
-                        
-                        
-                        for(; offset < dayId.Length;)
+
+
+                        for (; offset < dayId.Length;)
                         {
-                            if(deleteId == dayId[offset])
+                            if (deleteId == dayId[offset])
                             {
                                 List<string> tempId = dayId.OfType<string>().ToList();
                                 tempId.RemoveAt(offset);
@@ -240,7 +241,7 @@ namespace Shift_Scheduler.Models
             var result = (from s in db.ShiftSchedules
                           from e in db.Employees
                           where s.date >= startOfWeek && s.date <= endOfWeek && s.empShiftScheduleID == e.employeeId
-                          select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName}).ToList();
+                          select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName }).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -256,14 +257,48 @@ namespace Shift_Scheduler.Models
                        from s in db.ShiftSchedules
                        from e in db.Employees
                        where c.shiftScheduleID == s.shiftScheduleId && c.newWorkingEmp.employeeId == e.employeeId && c.shiftApproval == "pending"
-                       select new shiftChangeEmp { id = c.shiftChangeRequestId, date = s.date, shiftType = s.shiftType, curFirstName = c.currentWorkingEmp.firstName, curLastName = c.currentWorkingEmp.lastName, newFirstName =  e.firstName, newLastName = e.lastName}).ToList();
+                       select new shiftChangeEmp { id = c.shiftChangeRequestId, date = s.date, shiftType = s.shiftType, curFirstName = c.currentWorkingEmp.firstName, curLastName = c.currentWorkingEmp.lastName, newFirstName = e.firstName, newLastName = e.lastName }).ToList();
 
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RequestApprove(int id)
+        public ActionResult RequestApprove(int id)
         {
-            return Json(new { success = id }, JsonRequestBehavior.AllowGet);
+            var res = (from c in db.shiftChangeRequest
+                       where c.shiftChangeRequestId == id
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "approved";
+                var result = (from s in db.ShiftSchedules
+                              where res.shiftScheduleID == s.shiftScheduleId
+                              select s).FirstOrDefault();
+
+                result.empShiftScheduleID = res.newWorkingEmp.employeeId;
+
+                db.Entry(result).State = EntityState.Modified;
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
+        }
+
+        public ActionResult RequestDeny(int id)
+        {
+            var res = (from c in db.shiftChangeRequest
+                       where c.shiftChangeRequestId == id
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "denied";
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
         }
     }
 
