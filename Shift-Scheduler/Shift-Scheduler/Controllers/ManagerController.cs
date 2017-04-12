@@ -10,6 +10,7 @@ namespace Shift_Scheduler.Models
     public class ManagerController : Controller
     {
         private ShiftContext db = new ShiftContext();
+   
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
@@ -155,15 +156,14 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-          
-      
-                var res3 = (from s in db.Shifts
-                           from e in s.employee
-                           select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
+         
+            var res2 = (from s in db.Shifts
+                        from e in s.employee
+                        select new {s.shiftId,s.dayOfTheWeek,s.shiftType}).ToArray();
 
-            for (int j = 0; j < res3.Length; j++)
+            for (int j = 0; j < res2.Length; j++)
             {
-                string temp = res3[j].ToString();
+                string temp = res2[j].ToString();
                 temp = temp.Trim(new Char[] { '{', '}' });
                 String[] split = temp.Split(',');
                 // shift id value
@@ -216,6 +216,13 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
+            //foreach(var shiftChange in db.shiftChangeRequest)
+            //{
+
+            //}
+
+            var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
+
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
             ViewBag.empAvail = res.ToList();
