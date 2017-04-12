@@ -186,7 +186,7 @@ namespace Shift_Scheduler.Models
                     if (dayWeek == days[k])
                     {
                         deleteId = days[k].Substring(0, 3);
-                        days[k] = null;
+                        //days[k] = null;
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
@@ -223,7 +223,7 @@ namespace Shift_Scheduler.Models
 
             //}
 
-            var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
+            //var kasjdfkljaslkdfjlakdf = db.shiftChangeRequest;
 
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
@@ -249,6 +249,11 @@ namespace Shift_Scheduler.Models
                           select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName}).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ChangeShift()
+        {
+            return View();
         }
     }
 
