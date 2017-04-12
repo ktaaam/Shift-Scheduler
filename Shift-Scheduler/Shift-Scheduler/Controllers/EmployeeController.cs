@@ -10,8 +10,7 @@ namespace Shift_Scheduler.Controllers
     public class EmployeeController : Controller
     {
         private Employee employee;
-        private ShiftContext db = new ShiftContext();
-        
+        private ApplicationDbContext db = new ApplicationDbContext();        
         
         // GET: Employee
         public ActionResult Index()
@@ -20,11 +19,9 @@ namespace Shift_Scheduler.Controllers
             if (Session["EmpId"] != null)
                 this.employee = db.Employees.Find(Session["EmpId"]);
             else
-                return RedirectToAction("Login","Account");
-
+                return RedirectToAction("Login","Account");            
             
-
-            ViewData["EmpShifts"] = employee.ShiftSchedules;
+            ViewData["EmpShifts"] = employee.shiftSchedules;
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
