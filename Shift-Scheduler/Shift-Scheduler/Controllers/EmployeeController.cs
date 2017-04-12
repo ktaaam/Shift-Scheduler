@@ -21,18 +21,11 @@ namespace Shift_Scheduler.Controllers
             else
                 return Redirect("/login");
 
-            List<string> empShifts = new List<string>();
-
-            foreach(Shifts shift in employee.shifts)
-            {
-                empShifts.Add(shift.dayOfTheWeek + " " + shift.shiftType);
-            }
-
             List<string> empShiftSchedule = new List<string>();
 
             foreach (ShiftSchedule shift in employee.ShiftSchedules)
             {
-                empShifts.Add(shift.dayOfTheWeek + " " + shift.shiftType);
+                empShiftSchedule.Add(shift.shiftType + " " + shift.dayOfTheWeek);
             }
 
             ViewData["EmpShifts"] = empShiftSchedule;
