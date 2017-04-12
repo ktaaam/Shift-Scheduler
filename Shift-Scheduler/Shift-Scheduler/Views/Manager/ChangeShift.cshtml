@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "ChangeShift";
+}
+<div class="container body-content">
+    <h2>ChangeShift</h2>
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Shift Type
+            </th>
+            <th>Currently Scheduled Employee</th>
+            <th>
+                Desired Employee
+            </th>
+            <th>
+                Approval
+            </th>
+        </tr>       
+    </table>
+    </div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '@Url.Action("GetShiftChange")',
+                datatype: 'json',
+                success: function (data) {
+                    console.log(data);
+                    var str;
+                    for (var i = 0; i < data.length; i++) {
+                        str += '<tr>';
+                        str += '<td>' + new Date(parseInt(data[i]['date'].substr(6))) + '</td>';
+                        str += '<td>' + data[i]['shiftType'] + '</td>';
+                        str += '<td>' + data[i]['curFirstName'] + ' ' + data[i]['curLastName'] + '</td>';
+                        str += '<td>' + data[i]['newFirstName'] + ' ' + data[i]['newLastName'] + '</td>';
+                        str += '<td>' + '<button><a href="/Manager/RequestApprove?id=' + data[i]['id'] + '">Approve</a></button><button><a href="/Manager/RequestDeny?id=' + data[i]['id'] + '">Deny</a></button>' + '</td>';
+                        str += '</tr>';
+                    }
+                    $('table').append(str);
+                }
+            });
+        });
+    </script>
+    }

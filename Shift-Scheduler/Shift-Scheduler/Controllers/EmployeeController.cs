@@ -10,8 +10,7 @@ namespace Shift_Scheduler.Controllers
     public class EmployeeController : Controller
     {
         private Employee employee;
-        private ShiftContext db = new ShiftContext();
-        
+        private ApplicationDbContext db = new ApplicationDbContext();        
         
         // GET: Employee
         public ActionResult Index(int id = 0)
@@ -19,9 +18,11 @@ namespace Shift_Scheduler.Controllers
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                return Redirect("/login");
+                return RedirectToAction("login","Account");
 
-            ViewData["EmployeeShifts"] = employee.shifts.ToArray<Shifts>();
+            
+            
+            ViewData["EmpShifts"] = employee.shiftSchedules;
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
@@ -34,10 +35,7 @@ namespace Shift_Scheduler.Controllers
                 this.employee = db.Employees.Find(id);
             else
                 return Redirect("/login");
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
+            
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
@@ -59,16 +57,27 @@ namespace Shift_Scheduler.Controllers
             return View(employee);
         }
 
-        public ActionResult ShiftChangeRequest(int id = 0)
+        public ActionResult ShiftChangeRequest(int id, string shiftId)
         {
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
                 return Redirect("/login");
 
-            if (employee == null)
-                return HttpNotFound();
+            var res = from e in db.Employees
+                      from s in e.shifts
+                      where s.shiftId == shiftId
+                      select s;
 
+            var res2 = from e in db.Employees
+                       from s in e.shifts
+                       where s.dayOfTheWeek != db.ShiftSchedules.Find(shiftId).dayOfTheWeek
+                       select e;
+
+
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
@@ -82,16 +91,24 @@ namespace Shift_Scheduler.Controllers
             if (employee == null)
                 return HttpNotFound();
 
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult ClockIn(int id)
         {
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult ClockOut(int id)
         {
+
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["EmpId"] = employee.employeeId;
             return View();
         }
     }

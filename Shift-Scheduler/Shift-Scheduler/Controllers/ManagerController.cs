@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,7 +10,11 @@ namespace Shift_Scheduler.Models
     // todo: only allow manager
     public class ManagerController : Controller
     {
+<<<<<<< HEAD
         private ShiftContext db = new ShiftContext();
+=======
+        private ApplicationDbContext db = new ApplicationDbContext();
+>>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
 
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
@@ -68,6 +73,11 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
+<<<<<<< HEAD
+=======
+            //return Json(data);
+
+>>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
             foreach (ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))
@@ -91,7 +101,7 @@ namespace Shift_Scheduler.Models
                             return Json(new { error = "error" });
                         }
 
-                        start.AddDays((int)dayval);
+                        start = start.AddDays((int)dayval);
 
                         var exist = (from s in db.ShiftSchedules
                                      where s.date == start && s.shiftType == day.shiftType
@@ -184,7 +194,7 @@ namespace Shift_Scheduler.Models
                     if (dayWeek == days[k])
                     {
                         deleteId = days[k].Substring(0, 3);
-                        days[k] = null;
+                        //days[k] = null;
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
@@ -216,6 +226,7 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
+<<<<<<< HEAD
 
             var res3 = (from v in db.vacation
                         select new { v.vacationId, v.startDate, v.endDate, v.employeeId }).ToArray();
@@ -244,6 +255,8 @@ namespace Shift_Scheduler.Models
                 vacay.Add(empId);
             }
             ViewBag.vacation = vacay;
+=======
+>>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
 
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();
@@ -253,8 +266,89 @@ namespace Shift_Scheduler.Models
 
         public ActionResult Report()
         {
+            ViewBag.shift = db.Shifts.ToList();
+
             return View();
         }
+
+        public JsonResult GetShiftSchedule()
+        {
+            DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
+            DateTime endOfWeek = startOfWeek.AddDays(6);
+
+            var result = (from s in db.ShiftSchedules
+                          from e in db.Employees
+                          where s.date >= startOfWeek && s.date <= endOfWeek && s.empShiftScheduleID == e.employeeId
+                          select new { s.dayOfTheWeek, s.shiftType, e.firstName, e.lastName }).ToList();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ChangeShift()
+        {
+            return View();
+        }
+
+        public JsonResult GetShiftChange()
+        {
+            var res = (from c in db.shiftChangeRequest
+                       from s in db.ShiftSchedules
+                       from e in db.Employees
+                       where c.shiftScheduleID == s.shiftScheduleId && c.newWorkingEmp.employeeId == e.employeeId && c.shiftApproval == "pending"
+                       select new shiftChangeEmp { id = c.shiftChangeRequestId, date = s.date, shiftType = s.shiftType, curFirstName = c.currentWorkingEmp.firstName, curLastName = c.currentWorkingEmp.lastName, newFirstName = e.firstName, newLastName = e.lastName }).ToList();
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RequestApprove(int id)
+        {
+            var res = (from c in db.shiftChangeRequest
+                       where c.shiftChangeRequestId == id
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "approved";
+                var result = (from s in db.ShiftSchedules
+                              where res.shiftScheduleID == s.shiftScheduleId
+                              select s).FirstOrDefault();
+
+                result.empShiftScheduleID = res.newWorkingEmp.employeeId;
+
+                db.Entry(result).State = EntityState.Modified;
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
+        }
+
+        public ActionResult RequestDeny(int id)
+        {
+            var res = (from c in db.shiftChangeRequest
+                       where c.shiftChangeRequestId == id
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.shiftApproval = "denied";
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeShift");
+        }
+    }
+
+    public class shiftChangeEmp
+    {
+        public int id { get; set; }
+        public DateTime date { get; set; }
+        public string shiftType { get; set; }
+        public string curFirstName { get; set; }
+        public string curLastName { get; set; }
+        public string newFirstName { get; set; }
+        public string newLastName { get; set; }
     }
 
     public class ShiftEmp
