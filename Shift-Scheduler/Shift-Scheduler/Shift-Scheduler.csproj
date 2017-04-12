@@ -208,6 +208,7 @@
     <Content Include="Views\Manager\Dashboard.cshtml" />
     <Content Include="Views\Manager\Report.cshtml" />
     <Content Include="Views\Manager\ChangeShift.cshtml" />
+    <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -39,11 +39,12 @@
                 @for (int j = 0; j < days.Length; j++)
                 {
                     <td name="@shifts[i] @days[j]">
-                        @foreach (string shift in (List<string>)ViewData["EmpShifts"])
+                        @foreach (Shift_Scheduler.Models.ShiftSchedule shift in (ICollection<Shift_Scheduler.Models.ShiftSchedule>)ViewData["EmpShifts"])
                         {
-                            if (shift.Contains(shifts[i] + " " + days[j]))
+                            if (shift.shiftType.Contains(shifts[i]) && shift.dayOfTheWeek.Contains(days[j]))
                             {
-                                <p>@shift</p>
+                                <p>Scheduled</p><br/>
+                                <a href="/Employee/ShiftChangeRequest/@ViewData["empId"]/@shift.shiftScheduleId">Request Shift Change</a>
                             }
                         }
                     </td>

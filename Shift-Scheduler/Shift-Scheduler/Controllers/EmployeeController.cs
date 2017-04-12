@@ -19,16 +19,11 @@ namespace Shift_Scheduler.Controllers
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                return Redirect("/login");
+                return RedirectToAction("Account","login");
 
-            List<string> empShiftSchedule = new List<string>();
+            
 
-            foreach (ShiftSchedule shift in employee.ShiftSchedules)
-            {
-                empShiftSchedule.Add(shift.shiftType + " " + shift.dayOfTheWeek);
-            }
-
-            ViewData["EmpShifts"] = empShiftSchedule;
+            ViewData["EmpShifts"] = employee.ShiftSchedules;
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
@@ -63,15 +58,24 @@ namespace Shift_Scheduler.Controllers
             return View(employee);
         }
 
-        public ActionResult ShiftChangeRequest(int id = 0)
+        public ActionResult ShiftChangeRequest(int id, string shiftId)
         {
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
                 return Redirect("/login");
 
-            if (employee == null)
-                return HttpNotFound();
+            var res = from e in db.Employees
+                      from s in e.shifts
+                      where s.shiftId == shiftId
+                      select s;
+
+            var res2 = from e in db.Employees
+                       from s in e.shifts
+                       where s.dayOfTheWeek != db.ShiftSchedules.Find(shiftId).dayOfTheWeek
+                       select e;
+
+
 
             ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
