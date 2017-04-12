@@ -1,11 +1,13 @@
-﻿@model IEnumerable<Shift_Scheduler.Models.ShiftSchedule>
+﻿@model IEnumerable<Shift_Scheduler.ViewModel.ShiftScheduleViewModel>
 @{
     ViewBag.Title = "Index";
 
     DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
     DateTime endOfWeek = startOfWeek.AddDays(6);
 
-    string[] dayOfTheWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+
+    string[] daysOfTheWeek = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    string[] shifts = { "Morning", "Evening", "Night" };
 }
 
 
@@ -17,13 +19,47 @@
         </tr>
 
         <tr>
-            @foreach (string day in dayOfTheWeek)
+            @foreach (string day in daysOfTheWeek)
             {
                 <th name="weekDay">
-                    @day.ToString()
+                    @day.ToString()  
                 </th>
             }
         </tr>
+    
+        <tr>
+
+        </tr>
+        <tbody>
+            @foreach (string shift in shifts)
+            {
+                <tr>
+                    <td colspan="7" height="15">@shift.ToString()</td>
+                </tr>
+                <tr name="shift">
+                    @foreach (string day in daysOfTheWeek)
+                    {
+                            <td>
+                                @foreach (var i in Model)
+                                {
+                                    if (i.dayOfTheWeek == day && i.shiftType == shift)
+                                    {
+
+                                        @i.firstName;
+                                        @i.lastName;
+                                    }
+                                }
+
+                            </td>
+                        
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
 
 
 <!--
@@ -35,15 +71,13 @@
             <th>Approval Status</th>
         </tr>
 -->
-        @foreach (var result in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => result.shiftScheduleId)</td>
-                <td>@Html.DisplayFor(modelItem => result.date)</td>
-                <td>@Html.DisplayFor(modelItem => result.dayOfTheWeek)</td>
-                <td>@Html.DisplayFor(modelItem => result.shiftType)</td>
-                <td>@Html.DisplayFor(modelItem => result.empShiftScheduleID)</td>
-            </tr>
-        }
-    </table>
-</div>
+@*@foreach (var result in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => result.shiftScheduleId)</td>
+            <td>@Html.DisplayFor(modelItem => result.date)</td>
+            <td>@Html.DisplayFor(modelItem => result.dayOfTheWeek)</td>
+            <td>@Html.DisplayFor(modelItem => result.shiftType)</td>
+            <td>@Html.DisplayFor(modelItem => result.empShiftScheduleID)</td>
+        </tr>
+    }*@
