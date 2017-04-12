@@ -209,7 +209,7 @@ namespace Shift_Scheduler.Models
                     if (dayWeek == days[k])
                     {
                         deleteId = days[k].Substring(0, 3);
-                        days[k] = null;
+                        //days[k] = null;
                         List<string> tmp = days.OfType<string>().ToList();
                         tmp.RemoveAt(k);
                         days = tmp.ToArray();
