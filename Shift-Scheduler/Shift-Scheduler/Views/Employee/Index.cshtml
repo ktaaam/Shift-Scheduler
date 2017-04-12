@@ -13,6 +13,8 @@
 
     @{Html.RenderPartial("_navbar"); }
 
+    
+
 <table class="table table-bordered" id="shift_table">
     <thead>
         <tr>
@@ -33,10 +35,19 @@
             <tr>
                 <td colspan="7" height="15">@shifts[i]</td>
             </tr>
-            <tr name="shift">
+            <tr height="20">
                 @for (int j = 0; j < days.Length; j++)
                 {
-                    <td name="days[j]"></td>
+                    <td name="@shifts[i] @days[j]">
+                        @foreach (Shift_Scheduler.Models.ShiftSchedule shift in (ICollection<Shift_Scheduler.Models.ShiftSchedule>)ViewData["EmpShifts"])
+                        {
+                            if (shift.shiftType.Contains(shifts[i]) && shift.dayOfTheWeek.Contains(days[j]))
+                            {
+                                <p>Scheduled</p><br/>
+                                <a href="/Employee/ShiftChangeRequest/@ViewData["empId"]/@shift.shiftScheduleId">Request Shift Change</a>
+                            }
+                        }
+                    </td>
                 }
             </tr>
         }

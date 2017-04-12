@@ -19,5 +19,7 @@
 </ul>
 
 <script type="text/javascript">
-$("#" + window.location.pathname.substring(10,12).toLowerCase() + "li").attr("class", "active");
+    window.onload = function () {
+        $("#" + window.location.pathname.substring(10, 12).toLowerCase() + "li").attr("class", "active");
+    };
 </script>

@@ -256,10 +256,14 @@
     <Content Include="Views\Manager\Dashboard.cshtml" />
     <Content Include="Views\Manager\Report.cshtml" />
     <Content Include="Views\Manager\ChangeShift.cshtml" />
+
+    <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
+
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
