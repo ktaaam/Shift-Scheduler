@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "VacationRequest";
+}
+<div class="container body-content">
+    <h2>Vacation Request</h2>
+
+    @using (Html.BeginForm("VacationRequest", "Employee", FormMethod.Post))
+    {
+        <p>Date Start: </p><input type="date" name="datestart" required /><br />
+        <p>Date End: </p><input type="date" name="dateend" required />
+        <input type="submit" />
+    }
+
+    <div>
+        @Html.ActionLink("Back to Dash", "Index")
+    </div>
+    </div>

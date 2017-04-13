@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "VacationRequest";
+}
+<div class="container body-content">
+    <h2>ChangeShift</h2>
+    <table class="table">
+        <tr>
+            <th>
+                Date Start
+            </th>
+            <th>
+                Date End
+            </th>
+            <th>
+                Requested Employee
+            </th>
+            <th>
+                Approval
+            </th>
+        </tr>
+        @foreach (var emp in ViewData["Vacation"] as List<Shift_Scheduler.Models.Vacation>)
+        {
+            <tr>
+                <td>@emp.dateStart</td>
+                <td>@emp.dateEnd</td>
+                <td>@emp.Employees.firstName @emp.Employees.lastName</td>
+                <td><button><a href="/Manager/RequestApprove?id=@emp.vacationID">Approve</a></button><button><a href="/Manager/RequestDeny?id=@emp.vacationID">Deny</a></button></td>
+            </tr>
+        }
+    </table>
+</div>

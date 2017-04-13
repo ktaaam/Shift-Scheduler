@@ -263,6 +263,8 @@
     <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
     <Content Include="Views\Shared\_Layout_employee.cshtml" />
     <Content Include="Views\Shared\_Layout_login.cshtml" />
+    <Content Include="Views\Employee\VacationRequest.cshtml" />
+    <Content Include="Views\Manager\VacationRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
