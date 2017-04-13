@@ -60,18 +60,29 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult ShiftChangeRequest(int id)
         {
-            int empid = 1;
+            int empid = 3;
 
             if (empid > 0)
                 this.employee = db.Employees.Find(empid);
             else
                 return RedirectToAction("login", "Account");
 
+            var vac = (from e in db.Employees
+                       from v in e.vacationRequests
+                       where v.approvalStatus == "approved" && (v.dateStart <= DateTime.Now && v.dateEnd >= DateTime.Now)
+                       select e.employeeId).ToList();
+
             var res = (from s in db.ShiftSchedules
                        from c in db.Shifts
                        from e in c.employee
                        where s.empShiftScheduleID == empid && c.shiftType == s.shiftType && c.dayOfTheWeek == s.dayOfTheWeek && s.shiftScheduleId == id && e.employeeId != empid
                        select e).ToList();
+
+            for (int i = res.Count - 1; i >= 0; i--)
+            {
+                if (vac.Contains(res[i].employeeId))
+                    res.RemoveAt(i);
+            }
 
             ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
             ViewData["ShiftSchedule"] = id;
@@ -82,7 +93,7 @@ namespace Shift_Scheduler.Controllers
         [HttpPost]
         public ActionResult ShiftChangeRequest(int shiftscheduleid, int new_emp)
         {
-            int empid = 1;
+            int empid = 3;
             var res = (from e in db.Employees
                        from s in e.shiftSchedules
                        where e.employeeId == empid && s.shiftScheduleId == shiftscheduleid
