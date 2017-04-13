@@ -19,9 +19,9 @@ namespace Shift_Scheduler.Models
 
         public string approvalStatus { get; set; }
 
-        public int empVacationRequestID { get; set; }
+        public int employeeId { get; set; }
 
-        [ForeignKey("empVacationRequestID")]
+        [ForeignKey("employeeId")]
         public virtual Employee Employees { get; set; }
 
     }
