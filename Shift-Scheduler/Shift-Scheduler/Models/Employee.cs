@@ -20,13 +20,13 @@ namespace Shift_Scheduler.Models
 
         [Key]
         public int employeeId { get; set; }
-
+        [Display(Name = "First Name")]
         public string firstName { get; set; }
-
+        [Display(Name = "last Name")]
         public string lastName { get; set; }
 
         public string address { get; set; }
-
+        [Display(Name = "Phone Number")]
         public string phoneNumber { get; set; }
 
         public byte[] picture { get; set; }

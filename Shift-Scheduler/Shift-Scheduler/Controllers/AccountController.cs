@@ -86,9 +86,8 @@ namespace Shift_Scheduler.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-
-                    Session["EmpId"] = model.employeeId;
-
+                    var token = model.Email;
+                    Session["LoginSession"] = token;
                     if (User.IsInRole("Manager"))
                     {
                         return RedirectToAction("Dashboard", "Manager");
