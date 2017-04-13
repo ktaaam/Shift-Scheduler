@@ -56,27 +56,57 @@ namespace Shift_Scheduler.Controllers
             return View(employee);
         }
 
-        public ActionResult ShiftChangeRequest(string shiftId)
+        public ActionResult ShiftChangeRequest(int id)
         {
-            if(Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            int empid = 1;
+
+            if (empid > 0)
+                this.employee = db.Employees.Find(empid);
             else
                 return RedirectToAction("Login","Account");
 
-            ShiftSchedule shiftToChange = db.ShiftSchedules.Find(shiftId);
+            var res = (from s in db.ShiftSchedules
+                       from c in db.Shifts
+                       from e in c.employee
+                       where s.empShiftScheduleID == empid && c.shiftType == s.shiftType && c.dayOfTheWeek == s.dayOfTheWeek && s.shiftScheduleId == id && e.employeeId != empid
+                       select e).ToList();
 
-            var res = from e in db.Employees
-                       from s in e.shifts
-                       where s.dayOfTheWeek != shiftToChange.dayOfTheWeek
-                       select e;
-
-
-            
-            ViewData["ShiftToChange"] = shiftToChange;
-            ViewData["EmpAvailable"] = res.ToList();
-            ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
+            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
+            ViewData["ShiftSchedule"] = id;
+            ViewData["Employees"] = res;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult ShiftChangeRequest(int shiftscheduleid, int new_emp)
+        {
+            int empid = 1;
+            var res = (from e in db.Employees
+                       from s in e.shiftSchedules
+                       where e.employeeId == empid && s.shiftScheduleId == shiftscheduleid
+                       select s).FirstOrDefault();
+
+            if(res != null)
+            {
+                ShiftChangeRequest req = new ShiftChangeRequest();
+
+                req.shiftApproval = "pending";
+                req.newWorkingEmp = (from e in db.Employees
+                                     where e.employeeId == new_emp
+                                     select e).FirstOrDefault();
+
+                req.currentWorkingEmp = (from e in db.Employees
+                                         where e.employeeId == empid
+                                         select e).FirstOrDefault();
+
+                req.shiftSchedule = res;
+                req.shiftScheduleID = res.shiftScheduleId;
+
+                db.shiftChangeRequest.Add(req);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
         }
 
         public ActionResult VacationRequest(int id = 0)

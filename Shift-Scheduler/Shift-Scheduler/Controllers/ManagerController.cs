@@ -69,8 +69,6 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
-            //return Json(data);
-
             foreach (ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))
@@ -219,6 +217,34 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
+            
+            //var res3 = (from v in db.vacation
+            //            select new { v.vacationId, v.startDate, v.endDate, v.employeeId }).ToArray();
+            //List<String> vacay = new List<String>();
+            //for (int r = 0; r < res3.Length; r++)
+            //{
+            //    string temp = res3[r].ToString();
+            //    temp = temp.Trim(new Char[] { '{', '}' });
+            //    String[] split = temp.Split(',');
+
+            //    String[] vacationID = split[0].Split('=');
+            //    // vacation start date
+            //    String[] startDate = split[1].Split('=');
+            //    // vacation end date
+            //    String[] endDate = split[2].Split('=');
+            //    String[] employeeId = split[3].Split('=');
+
+            //    string vId = vacationID[1].Trim();
+            //    string start = startDate[1].Trim();
+            //    string end = endDate[1].Trim();
+            //    string empId = employeeId[1].Trim();
+
+            //    vacay.Add(vId);
+            //    vacay.Add(start);
+            //    vacay.Add(end);
+            //    vacay.Add(empId);
+            //}
+            //ViewBag.vacation = vacay;
 
             ViewBag.shiftDay = days.ToList();
             ViewBag.shiftType = dayType.ToList();

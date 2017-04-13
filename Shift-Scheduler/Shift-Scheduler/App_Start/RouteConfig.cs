@@ -16,7 +16,7 @@ namespace Shift_Scheduler
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
+                defaults: new { controller = "Manager", action = "dashBoard", id = UrlParameter.Optional }
             );
         }
     }
