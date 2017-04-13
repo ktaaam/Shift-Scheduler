@@ -48,7 +48,6 @@ namespace Shift_Scheduler.Models
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "Remember me?")]
-        [DefaultValue(false)]
         public bool RememberMe { get; set; }
 
         public string Name { get; set; }
