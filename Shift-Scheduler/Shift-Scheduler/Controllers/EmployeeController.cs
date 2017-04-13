@@ -15,8 +15,9 @@ namespace Shift_Scheduler.Controllers
         // GET: Employee
         public ActionResult Index()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            var sessionToken = Session["LoginSession"];
+            if (sessionToken != null)
+                this.employee = db.Employees.Find(sessionToken);
             else
                 return RedirectToAction("Login", "Account");
 
@@ -26,20 +27,20 @@ namespace Shift_Scheduler.Controllers
 
             ViewData["EmpShifts"] = employee.shiftSchedules;
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
+            ViewData["LoginSession"] = employee.Email;
             return View();
         }
 
         public ActionResult UserProfile()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login", "Account");
 
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
+            ViewData["LoginSession"] = employee.Email;
             return View(employee);
         }
 
@@ -54,14 +55,14 @@ namespace Shift_Scheduler.Controllers
                 return RedirectToAction("Index");
             }
             ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
+            ViewData["LoginSession"] = employee.Email;
             return View(employee);
         }
 
         public ActionResult ShiftChangeRequest()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login","Account"); 
 
@@ -80,8 +81,8 @@ namespace Shift_Scheduler.Controllers
         [HttpPost]
         public ActionResult ShiftChangeRequest(int shiftscheduleid, int new_emp)
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login", "Account");
 
@@ -115,8 +116,8 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult VacationRequest()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login", "Account");
 
@@ -124,14 +125,14 @@ namespace Shift_Scheduler.Controllers
                 return HttpNotFound();
 
             ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
+            ViewData["LoginSession"] = employee.Email;
             return View();
         }
 
         public ActionResult ClockIn()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login", "Account");
 
@@ -157,8 +158,8 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult ClockOut()
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (Session["LoginSession"] != null)
+                this.employee = db.Employees.Find(Session["LoginSession"]);
             else
                 return RedirectToAction("Login", "Account");
 
