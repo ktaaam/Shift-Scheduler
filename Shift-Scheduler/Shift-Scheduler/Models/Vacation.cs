@@ -9,6 +9,7 @@ namespace Shift_Scheduler.Models
 {
     public class Vacation
     {
+
         [Key]
         public int vacationID { get; set; }
 
@@ -22,9 +23,6 @@ namespace Shift_Scheduler.Models
 
         [ForeignKey("empVacationRequestID")]
         public virtual Employee Employees { get; set; }
-
-
-
 
     }
 }

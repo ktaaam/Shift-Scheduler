@@ -28,7 +28,7 @@ namespace Shift_Scheduler.Models
             : base("defaultConnection", throwIfV1Schema: false)
         {
         }
-
+        public DbSet<Clock> Clocks { get; set; }
         public DbSet<Shifts> Shifts { get; set; }
         public DbSet<Employee> Employees { get; set; }
 

@@ -223,6 +223,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Clock.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ShiftChangeRequest.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -260,6 +261,8 @@
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
+    <Content Include="Views\Shared\_Layout_employee.cshtml" />
+    <Content Include="Views\Shared\_Layout_login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

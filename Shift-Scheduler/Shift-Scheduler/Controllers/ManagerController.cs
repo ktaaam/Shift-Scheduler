@@ -10,8 +10,8 @@ namespace Shift_Scheduler.Models
     // todo: only allow manager
     public class ManagerController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
 
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
@@ -217,7 +217,7 @@ namespace Shift_Scheduler.Models
                     }
                 }
             }
-            
+
             //var res3 = (from v in db.vacation
             //            select new { v.vacationId, v.startDate, v.endDate, v.employeeId }).ToArray();
             //List<String> vacay = new List<String>();

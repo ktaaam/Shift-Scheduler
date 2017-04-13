@@ -10,30 +10,32 @@ namespace Shift_Scheduler.Controllers
     public class EmployeeController : Controller
     {
         private Employee employee;
-        private ApplicationDbContext db = new ApplicationDbContext();        
-        
-        // GET: Employee
-        public ActionResult Index()
-        {
-            Session["EmpId"] = 1;
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
-            else
-                return RedirectToAction("Login","Account");            
-            
-            ViewData["EmpShifts"] = employee.shiftSchedules;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-            ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
+        // GET: Employee
+        public ActionResult Index(int id = 0)
+        {
+            if (id > 0)
+                this.employee = db.Employees.Find(id);
+            else
+                return RedirectToAction("login", "Account");
+
+
+            if (employee == null)
+                return RedirectToAction("login", "Account");
+
+            ViewData["EmpShifts"] = employee.shiftSchedules;
+            ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
             return View();
         }
 
         public ActionResult UserProfile(int? id)
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (id > 0)
+                this.employee = db.Employees.Find(id);
             else
-                return RedirectToAction("Login","Account");
+                return Redirect("/login");
 
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
@@ -63,7 +65,7 @@ namespace Shift_Scheduler.Controllers
             if (empid > 0)
                 this.employee = db.Employees.Find(empid);
             else
-                return RedirectToAction("Login","Account");
+                return Redirect("/login");
 
             var res = (from s in db.ShiftSchedules
                        from c in db.Shifts
@@ -86,7 +88,7 @@ namespace Shift_Scheduler.Controllers
                        where e.employeeId == empid && s.shiftScheduleId == shiftscheduleid
                        select s).FirstOrDefault();
 
-            if(res != null)
+            if (res != null)
             {
                 ShiftChangeRequest req = new ShiftChangeRequest();
 
@@ -111,10 +113,10 @@ namespace Shift_Scheduler.Controllers
 
         public ActionResult VacationRequest(int id = 0)
         {
-            if (Session["EmpId"] != null)
-                this.employee = db.Employees.Find(Session["EmpId"]);
+            if (id > 0)
+                this.employee = db.Employees.Find(id);
             else
-                return RedirectToAction("Login","Account");
+                return Redirect("/login");
 
             if (employee == null)
                 return HttpNotFound();
@@ -124,20 +126,46 @@ namespace Shift_Scheduler.Controllers
             return View();
         }
 
-        public ActionResult ClockIn(int id)
+        public ActionResult ClockIn()
         {
+            int empid = 1;
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
-            return View();
+            var res = (from c in db.Clocks
+                       where c.empClockID == empid && c.clockOut == null && c.clockIn != null
+                       select c).FirstOrDefault();
+
+            if (res == null)
+            {
+                Clock clockin = new Clock();
+                clockin.Employees = (from e in db.Employees
+                                     where e.employeeId == empid
+                                     select e).FirstOrDefault();
+                clockin.empClockID = empid;
+                clockin.clockIn = DateTime.Now;
+
+                db.Clocks.Add(clockin);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
         }
 
-        public ActionResult ClockOut(int id)
+        public ActionResult ClockOut()
         {
+            int empid = 1;
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
-            return View();
+            var res = (from c in db.Clocks
+                       where c.empClockID == empid && c.clockIn != null && c.clockOut == null
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.clockOut = DateTime.Now;
+
+                db.Entry(res).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("index");
         }
     }
 }
