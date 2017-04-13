@@ -47,7 +47,7 @@ namespace Shift_Scheduler.Models
         public byte[] picture { get; set; }
         public string department { get; set; }
 
-        public virtual ICollection<Shifts> shifts { get; set; } 
+        public virtual ICollection<Shifts> shifts { get; set; }
         public virtual ICollection<ShiftChangeRequest> shiftChangeRequest { get; set; }
         public virtual ICollection<ShiftSchedule> shiftSchedules { get; set; }
         public virtual ICollection<Vacation> vacationRequests { get; set; }

@@ -23,6 +23,6 @@ namespace Shift_Scheduler.Models
 
         [ForeignKey("empVacationRequestID")]
         public virtual Employee Employees { get; set; }
-        
+
     }
 }
