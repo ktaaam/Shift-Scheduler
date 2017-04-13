@@ -45,7 +45,7 @@
                                 <td>@emp.currentWorkingEmpLastName</td>
                                 <td>@emp.newWorkingEmpFirstName</td>
                                 <td>@emp.newWorkingEmpLastName</td>
-                                <td>@emp.approvalStatus</td>
+                                <td>@emp.shiftApproval</td>
                                 <td>@emp.shiftScheduleID</td>
                             </tr>
                         }
@@ -108,13 +108,18 @@
                 </tr>
             </thead>
             <tbody>
-                @if (ViewBag.vacation != null)
+                @if (ViewBag.fName!= null)
                 {
-                    foreach (var vacay in ViewBag.vacation)
+                    for(int j = 0; j < ViewBag.fName.Count; j++ )
                     {
                         <tr>
-                            <td>@vacay</td>
-
+                            <td>@ViewBag.vaId[j]</td>
+                            <td>@ViewBag.sDate[j]</td>
+                            <td>@ViewBag.eDate[j]</td>
+                            <td>@ViewBag.fName[j]</td>
+                            <td>@ViewBag.lName[j]</td>
+                            <td>@ViewBag.emId[j]</td>
+                            <td>@ViewBag.app[j]</td>
                         </tr>
                     }
                 }

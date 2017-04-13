@@ -1,5 +1,6 @@
 ﻿using Shift_Scheduler.ViewModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -150,7 +151,7 @@ namespace Shift_Scheduler.Models
 
         public ActionResult dashBoard()
         {
-            IQueryable<Shifts>[] output = new IQueryable<Shifts>[30];
+            
             int dateNumber = (int)DateTime.Today.DayOfWeek;
             string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             string[] dayId = { "MonMor", "MonEve", "MonNit", "TuesMor", "TuesEve", "TuesNit", "WedMor", "WedEve", "WedNit",
@@ -158,6 +159,16 @@ namespace Shift_Scheduler.Models
                                  "SunMor", "SunEve", "SunNit" };
             string[] dayType = { "Morning", "Evening", "Night" };
             string dayOfTheWeek = "";
+
+            ArrayList first = new ArrayList();
+            ArrayList last = new ArrayList();
+            ArrayList approve = new ArrayList();
+            ArrayList vId = new ArrayList();
+            ArrayList startDate = new ArrayList();
+            ArrayList endDate = new ArrayList();
+            ArrayList eId = new ArrayList();
+            //int counter = 0;
+
             for (int i = 0; i < days.Length; i++)
             {
                 if (dateNumber == i)
@@ -169,18 +180,49 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
+            ViewBag.empAvail = res.ToList();
             var res3 = (from v in db.VacationRequests
                        join e in db.Employees on v.employeeId equals e.employeeId
-                       select new { e.firstName, e.lastName, v.employeeId,v.dateStart,v.dateEnd,v.approvalStatus,v.vacationID }).ToList();
+                       select new { e.firstName, e.lastName, v.employeeId,v.dateStart,v.dateEnd,v.approvalStatus,v.vacationID }).ToArray();
+            for(int i = 0; i < res3.Length; i++)
+            {
+                string temp = res3[i].ToString();
+                string trim = temp.Trim(new Char[] { '{', '}' });
+                string[] split = trim.Split(',');
+                int j = 0;
+                string[] firstName = split[j++].Split('=');
+                string[] lastName = split[j++].Split('=');
+                string[] employeeId = split[j++].Split('=');
+                string[] dateStart = split[j++].Split('=');
+                string[] dateEnd = split[j++].Split('=');
+                string[] approvalStatus = split[j++].Split('=');
+                string[] vacationId = split[j++].Split('=');
 
-           
-            
+                first.Add(firstName[1].Trim());
+                last.Add(lastName[1].Trim());
+                eId.Add(employeeId[1].Trim());
+                approve.Add(approvalStatus[1].Trim());
+                startDate.Add(dateStart[1].Trim());
+                endDate.Add(dateEnd[1].Trim());
+                vId.Add(vacationId[1].Trim());
+
+
+            }
+ 
+            ViewBag.fName = first;
+            ViewBag.lName = last;
+            ViewBag.emId  = eId;
+            ViewBag.vaId = vId;
+            ViewBag.sDate = startDate;
+            ViewBag.eDate = endDate;
+            ViewBag.app = approve;
+            ViewBag.vacation = res3.ToList();
+
             foreach (var s in db.shiftChangeRequest)
             {
                 var res2 = (from sc in db.shiftChangeRequest
                             from e in db.Employees
                             where e.employeeId == s.currentWorkingEmp.employeeId
-
                             select new DashBoardViewModel
                             {
                                 shiftChangeRequestId = sc.shiftChangeRequestId,
@@ -192,10 +234,9 @@ namespace Shift_Scheduler.Models
                                 newWorkingEmpLastName = sc.currentWorkingEmp.lastName,
                                 currentWorkingEmpId = sc.currentWorkingEmp.employeeId,
                                 newWorkingEmpId = sc.newWorkingEmp.employeeId,
-                                
-                               
+
                             }).ToList();
-                ViewBag.empAvail = res.ToList();
+               
                 return View(res2);
 
             }

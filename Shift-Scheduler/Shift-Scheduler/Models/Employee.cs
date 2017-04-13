@@ -22,8 +22,13 @@ namespace Shift_Scheduler.Models
         public int employeeId { get; set; }
         [Display(Name = "First Name")]
         public string firstName { get; set; }
+
         [Display(Name = "last Name")]
         public string lastName { get; set; }
+
+        public string userName { get; set; }
+      
+        public string role { get; set; }
 
         public string address { get; set; }
         [Display(Name = "Phone Number")]
@@ -32,7 +37,6 @@ namespace Shift_Scheduler.Models
         public byte[] picture { get; set; }
         public string department { get; set; }
 
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
