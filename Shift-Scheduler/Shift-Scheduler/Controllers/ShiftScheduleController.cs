@@ -11,7 +11,7 @@ namespace Shift_Scheduler.Controllers
 {
     public class ShiftScheduleController : Controller
     {
-        ShiftContext db = new ShiftContext();
+        ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: ShiftSchedule
         public ActionResult Index()
