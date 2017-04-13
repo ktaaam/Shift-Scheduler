@@ -50,7 +50,7 @@ namespace Shift_Scheduler.Controllers
         {
             context.Roles.Add(Role);
             context.SaveChanges();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index");
         }
 
 

@@ -71,8 +71,9 @@ namespace Shift_Scheduler.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(Employee model, string returnUrl)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -80,21 +81,18 @@ namespace Shift_Scheduler.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
 
-                    Session["EmpId"] = from e in context.Employees
-                                   where e.userName == model.Username
-                                   select e.employeeId;
+                    Session["EmpId"] = model.employeeId;
 
                     if (User.IsInRole("Manager"))
                     {
                         return RedirectToAction("Dashboard", "Manager");
                     }
                     return RedirectToAction("Index", "Employee");
-
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -105,7 +103,7 @@ namespace Shift_Scheduler.Controllers
                     return View(model);
             }
         }
-
+        /*
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -148,13 +146,12 @@ namespace Shift_Scheduler.Controllers
                     return View(model);
             }
         }
-
+        */
         //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
-
             ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
             return View();
         }
@@ -164,12 +161,12 @@ namespace Shift_Scheduler.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(Employee model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Username, employee = new Employee { userName = model.Username, passWord = model.Password} };
-                
+                var user = new ApplicationUser { Email = model.Email, employee = new Employee { Email = model.Email, Password = model.Password } };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -252,7 +249,7 @@ namespace Shift_Scheduler.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
