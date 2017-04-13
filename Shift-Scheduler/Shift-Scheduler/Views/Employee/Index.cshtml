@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Shift View";
 
     DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
@@ -11,51 +10,51 @@
 <div class="container body-content">
     <h2>Employee Shift - @ViewData["EmpName"]</h2>
 
-    @{Html.RenderPartial("_navbar"); }
+    @*@{Html.RenderPartial("_navbar"); }*@
 
-    
 
-<table class="table table-bordered" id="shift_table">
-    <thead>
-        <tr>
-            <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
-        </tr>
-        <tr>
-            @foreach (string day in days)
-            {
-                <th name="weekDay">
-                    @day.ToString()
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < shifts.Length; i++)
-        {
+
+    <table class="table table-bordered" id="shift_table">
+        <thead>
             <tr>
-                <td colspan="7" height="15">@shifts[i]</td>
+                <th colspan="7">@startOfWeek.ToString("MMM d yyyy") - @endOfWeek.ToString("MMM d yyyy")</th>
             </tr>
-            <tr height="20">
-                @for (int j = 0; j < days.Length; j++)
-                {
-                    <td name="@shifts[i] @days[j]">
-                        @foreach (Shift_Scheduler.Models.ShiftSchedule shift in (ICollection<Shift_Scheduler.Models.ShiftSchedule>)ViewData["EmpShifts"])
-                        {
-                            if (shift.shiftType.Contains(shifts[i]) && shift.dayOfTheWeek.Contains(days[j]))
-                            {
-                                <p>Scheduled</p><br/>
-                                <a href="/Employee/ShiftChangeRequest/@ViewData["empId"]/@shift.shiftScheduleId">Request Shift Change</a>
-                            }
-                        }
-                    </td>
+            <tr>
+                @foreach (string day in days)
+            {
+                    <th name="weekDay">
+                        @day.ToString()
+                    </th>
                 }
             </tr>
-        }
+        </thead>
+        <tbody>
+            @for (int i = 0; i < shifts.Length; i++)
+            {
+                <tr>
+                    <td colspan="7" height="15">@shifts[i]</td>
+                </tr>
+                <tr height="20">
+                    @for (int j = 0; j < days.Length; j++)
+                {
+                        <td name="@shifts[i] @days[j]">
+                            @foreach (Shift_Scheduler.Models.ShiftSchedule shift in (ICollection<Shift_Scheduler.Models.ShiftSchedule>)ViewData["EmpShifts"])
+                            {
+                                if (shift.shiftType.Contains(shifts[i]) && shift.dayOfTheWeek.Contains(days[j]))
+                                {
+                                    <p>Scheduled</p><br />
+                                    <a href="/Employee/ShiftChangeRequest/@shift.shiftScheduleId">Request Shift Change</a>
+                                }
+                            }
+                        </td>
+                    }
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 
 
-    @section Styles{
-        <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
-    }
+@section Styles{
+    <link href="~/Content/schedule.css" type="text/css" rel="stylesheet" />
+}

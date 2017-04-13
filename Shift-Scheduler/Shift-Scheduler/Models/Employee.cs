@@ -13,6 +13,8 @@ namespace Shift_Scheduler.Models
             shiftSchedules = new List<ShiftSchedule>();
 
             vacationRequests = new List<Vacation>();
+
+            clock = new List<Clock>();
         }
 
         [Key]
@@ -47,10 +49,11 @@ namespace Shift_Scheduler.Models
 
         public virtual ICollection<Shifts> shifts { get; set; }
 
-
         public virtual ICollection<ShiftChangeRequest> shiftChangeRequest { get; set; }
-
         public virtual ICollection<ShiftSchedule> shiftSchedules { get; set; }
         public virtual ICollection<Vacation> vacationRequests { get; set; }
+        public virtual ICollection<Clock> clock { get; set; }
+
+
     }
 }

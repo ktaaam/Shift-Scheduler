@@ -3,34 +3,6 @@
 @{
     ViewBag.Title = "Dashboard";
 }
-
-
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="@Html.ActionLink("DashBoard", "dashBoard", "Manager")">J.A.K.M Industry</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li>@Html.ActionLink("DashBoard", "dashBoard", "Manager")</li>
-                <li>@Html.ActionLink("Employee List", "employeeList", "Manager")</li>
-                <li>@Html.ActionLink("Shift", "Shift", "Manager")</li>
-
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
-        </div>
-    </div>
-</nav>
-
 <div class="container-fluid">
 
     <h1 class="page-header">Dashboard</h1>
@@ -63,18 +35,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var emp in Model)
+                    @if (Model != null)
                     {
-                        <tr>
-                            <td>@emp.shiftChangeRequestId</td>
-                            <td>@emp.currentWorkingEmpFirstName</td>
-                            <td>@emp.currentWorkingEmpLastName</td>
-                            <td>@emp.newWorkingEmpFirstName</td>
-                            <td>@emp.newWorkingEmpLastName</td>
-                            <td>@emp.approvalStatus</td>
-                            <td>@emp.shiftScheduleID</td>
-                        </tr>
+                        foreach (var emp in Model)
+                        {
+                            <tr>
+                                <td>@emp.shiftChangeRequestId</td>
+                                <td>@emp.currentWorkingEmpFirstName</td>
+                                <td>@emp.currentWorkingEmpLastName</td>
+                                <td>@emp.newWorkingEmpFirstName</td>
+                                <td>@emp.newWorkingEmpLastName</td>
+                                <td>@emp.approvalStatus</td>
+                                <td>@emp.shiftScheduleID</td>
+                            </tr>
+                        }
                     }
+                   
                 </tbody>
             </table>
         </div>
@@ -95,17 +71,21 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var emp in ViewBag.empAvail)
+                @if (ViewBag.empAvail != null)
                 {
-                    <tr>
-                        <td>@emp.employeeId</td>
-                        <td>@emp.firstName</td>
-                        <td>@emp.lastName</td>
-                        <td>@emp.phoneNumber</td>
-                        <td>@emp.role</td>
+                    foreach (var emp in ViewBag.empAvail)
+                    {
+                        <tr>
+                            <td>@emp.employeeId</td>
+                            <td>@emp.firstName</td>
+                            <td>@emp.lastName</td>
+                            <td>@emp.phoneNumber</td>
+                            <td>@emp.role</td>
 
-                    </tr>
+                        </tr>
+                    }
                 }
+                
             </tbody>
         </table>
     </div>
@@ -120,25 +100,23 @@
                     <th>Vacation Request ID</th>
                     <th>Date Start</th>
                     <th>Date End</th>
-                    <th>Employee Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>Employee Id</th>
+                    <th>Approval</th>
+              
                 </tr>
             </thead>
             <tbody>
-                @foreach (var vacay in ViewBag.vacation)
+                @if (ViewBag.vacation != null)
                 {
-                    
-                    
+                    foreach (var vacay in ViewBag.vacation)
+                    {
                         <tr>
-                            <td>@vacay.vacationID</td>
-                            <td>@vacay.dateStart</td>
-                            <td>@vacay.dateEnd</td>
-                            <td>@vacay.employeeId</td>
-                            <td>@vacay.employeeFirstName</td>
-                            <td>@vacay.employeeLastName</td>
+                            <td>@vacay</td>
+
                         </tr>
-                    
+                    }
                 }
             </tbody>
         </table>

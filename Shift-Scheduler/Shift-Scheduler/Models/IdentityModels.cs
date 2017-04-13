@@ -12,6 +12,7 @@ namespace Shift_Scheduler.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public Employee employee { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -27,7 +28,7 @@ namespace Shift_Scheduler.Models
             : base("defaultConnection", throwIfV1Schema: false)
         {
         }
-
+        public DbSet<Clock> Clocks { get; set; }
         public DbSet<Shifts> Shifts { get; set; }
         public DbSet<Employee> Employees { get; set; }
 

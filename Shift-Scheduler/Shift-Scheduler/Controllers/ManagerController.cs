@@ -14,8 +14,6 @@ namespace Shift_Scheduler.Models
 
         private ApplicationDbContext db = new ApplicationDbContext();
 
-
-
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
@@ -47,12 +45,23 @@ namespace Shift_Scheduler.Models
         {
             List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();
 
+            var vac = (from e in db.Employees
+                       from v in e.vacationRequests
+                       where v.approvalStatus == "approved" && (v.dateStart <= DateTime.Now && v.dateEnd >= DateTime.Now)
+                       select e.employeeId).ToList();
+
             foreach (var shift in db.Shifts)
-            {
+            {                
                 var res = (from e in db.Employees
                            from s in e.shifts
                            where s.shiftId == shift.shiftId
                            select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
+
+                for(int i=res.Count-1;i>= 0;i--)
+                {
+                    if (vac.Contains(res[i].employeeId))
+                        res.RemoveAt(i);
+                }
 
                 List<ScheduleEmp> temp = new List<ScheduleEmp>();
                 foreach (var result in res)
@@ -71,8 +80,6 @@ namespace Shift_Scheduler.Models
         {
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
-
-            //return Json(data);
 
             foreach (ShiftEmp shift in data)
             {
@@ -162,16 +169,18 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-            var res3 = from v in db.VacationRequests
-                       from e in db.Employees
-                       select v;
-           ViewBag.vacation = res3.ToList();
+            var res3 = (from v in db.VacationRequests
+                       join e in db.Employees on v.employeeId equals e.employeeId
+                       select new { e.firstName, e.lastName, v.employeeId,v.dateStart,v.dateEnd,v.approvalStatus,v.vacationID }).ToList();
+
+           
+            
             foreach (var s in db.shiftChangeRequest)
             {
                 var res2 = (from sc in db.shiftChangeRequest
                             from e in db.Employees
                             where e.employeeId == s.currentWorkingEmp.employeeId
-                       
+
                             select new DashBoardViewModel
                             {
                                 shiftChangeRequestId = sc.shiftChangeRequestId,
@@ -183,13 +192,14 @@ namespace Shift_Scheduler.Models
                                 newWorkingEmpLastName = sc.currentWorkingEmp.lastName,
                                 currentWorkingEmpId = sc.currentWorkingEmp.employeeId,
                                 newWorkingEmpId = sc.newWorkingEmp.employeeId,
-                               
+                                
                                
                             }).ToList();
                 ViewBag.empAvail = res.ToList();
                 return View(res2);
 
             }
+
             return View();
         }
             
@@ -217,6 +227,47 @@ namespace Shift_Scheduler.Models
         public ActionResult ChangeShift()
         {
             return View();
+        }
+
+        public ActionResult VacationRequest()
+        {
+            ViewData["Vacation"] = (from v in db.VacationRequests
+                                    where v.approvalStatus == "pending"
+                                    select v).ToList();
+
+            return View();
+        }
+
+        public ActionResult VacationApprove(int id)
+        {
+            var res = (from v in db.VacationRequests
+                       where v.vacationID == id
+                       select v).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.approvalStatus = "approved";                               
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("VacationRequest");
+        }
+
+        public ActionResult VacationDeny(int id)
+        {
+            var res = (from v in db.VacationRequests
+                       where v.vacationID == id
+                       select v).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.approvalStatus = "denied";
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("VacationRequest");
         }
 
         public JsonResult GetShiftChange()

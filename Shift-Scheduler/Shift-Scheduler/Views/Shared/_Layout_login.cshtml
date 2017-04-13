@@ -20,23 +20,14 @@
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
-            <div class="navbar-header">                
-                @Html.ActionLink("J.A.K.M Industry", "dashboard", "Manager", null, new { @class = "navbar-brand" })
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("DashBoard", "dashBoard", "Manager")</li>
-                    <li>@Html.ActionLink("Employee List", "employeeList", "Manager")</li>
-                    <li>@Html.ActionLink("Shift Maker", "Shift", "Manager")</li>
-                    <li>@Html.ActionLink("Shift Request", "ChangeShift", "Manager")</li>
-                    <li>@Html.ActionLink("Vacation Request", "Shift", "Manager")</li>
-                    <li>@Html.ActionLink("Report", "Report", "Manager")</li>
-                </ul>
-            </div>
+            <div class="navbar-header">
+                @Html.ActionLink("J.A.K.M Industry", "login", "Account", null, new { @class = "navbar-brand" })
+            </div>           
         </div>
     </nav>
 
     @RenderBody()
+
     <hr />
     <footer>
         <p class="text-center">&copy; @DateTime.Now.Year - My ASP.NET Application</p>

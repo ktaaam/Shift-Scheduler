@@ -223,6 +223,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Clock.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ShiftChangeRequest.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="ViewModel\DashBoardViewModel.cs" />
     <Compile Include="ViewModel\ShiftScheduleViewModel.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\VacationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -256,11 +258,15 @@
     <Content Include="Views\Manager\Dashboard.cshtml" />
     <Content Include="Views\Manager\Report.cshtml" />
     <Content Include="Views\Manager\ChangeShift.cshtml" />
-    <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Employee\ShiftChangeRequest.cshtml" />
+    <Content Include="Views\Shared\_Layout_employee.cshtml" />
+    <Content Include="Views\Shared\_Layout_login.cshtml" />
+    <Content Include="Views\Employee\VacationRequest.cshtml" />
+    <Content Include="Views\Manager\VacationRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
