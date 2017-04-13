@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Shift_Scheduler.ViewModel.DashBoardViewModel>
+
+@{
     ViewBag.Title = "Dashboard";
 }
 
@@ -46,80 +48,31 @@
         </div>
     </div>
     <div class="col-xs-6 col-md-4 rightbar img-rounded">
-        <h4 class="sub-header">Missing Shift</h4>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Day</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var shift in ViewBag.shiftDay)
-                {
-                    <tr>
-                        <td>@shift</td>
-                        @foreach (var type in ViewBag.shiftType)
-                        {
-                            <td>@type</td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="col-xs-12 col-md-8">
-        <h2 class="sub-header">Employee Available Today</h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var emp in ViewBag.empAvail)
-                    {
-                        <tr>
-                            <td>@emp.employeeId</td>
-                            <td>@emp.firstName</td>
-                            <td>@emp.lastName</td>
-                            <td>@emp.phoneNumber</td>
-                            <td>@emp.role</td>
-
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-4 rightbar img-rounded">
         <h4 class="sub-header">Shift Change Request</h4>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>Role</th>
+                        <th>Shift Change ID</th>
+                        <th>Employee First Name</th>
+                        <th>Employee Last Name</th>
+                        <th>New Employee First Name</th>
+                        <th>New Employee Last Name</th>
+                        <th>Approval</th>
+                        <th>Shift Schedule</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var emp in ViewBag.empAvail)
+                    @foreach (var emp in Model)
                     {
                         <tr>
-                            <td>@emp.employeeId</td>
-                            <td>@emp.firstName</td>
-                            <td>@emp.lastName</td>
-                            <td>@emp.phoneNumber</td>
-                            <td>@emp.role</td>
+                            <td>@emp.shiftChangeRequestId</td>
+                            <td>@emp.currentWorkingEmpFirstName</td>
+                            <td>@emp.currentWorkingEmpLastName</td>
+                            <td>@emp.newWorkingEmpFirstName</td>
+                            <td>@emp.newWorkingEmpLastName</td>
+                            <td>@emp.approvalStatus</td>
+                            <td>@emp.shiftScheduleID</td>
                         </tr>
                     }
                 </tbody>
@@ -127,36 +80,71 @@
         </div>
     </div>
 </div>
-<div class="col-xs-6 col-md-4 rightbar img-rounded">
-    <h4 class="sub-header">Shift Change Request</h4>
+
+<div class="col-xs-12 col-md-8">
+    <h2 class="sub-header">Employee Available Today</h2>
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Vacation Request</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Employee Id</th>
+                    <th>Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-
+                    <th>Phone Number</th>
+                    <th>Role</th>
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i< ViewBag.vacation.Length; i++)
+                @foreach (var emp in ViewBag.empAvail)
                 {
                     <tr>
-                        @foreach (var v in ViewBag.vacation)
-                        {
-                            <td>@v</td>
-                        }
-                   </tr>
+                        <td>@emp.employeeId</td>
+                        <td>@emp.firstName</td>
+                        <td>@emp.lastName</td>
+                        <td>@emp.phoneNumber</td>
+                        <td>@emp.role</td>
+
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<div class="col-xs-6 col-md-4 rightbar img-rounded">
+    <h4 class="sub-header">Vacation Request</h4>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vacation Request ID</th>
+                    <th>Date Start</th>
+                    <th>Date End</th>
+                    <th>Employee Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vacay in ViewBag.vacation)
+                {
+                    
+                    
+                        <tr>
+                            <td>@vacay.vacationID</td>
+                            <td>@vacay.dateStart</td>
+                            <td>@vacay.dateEnd</td>
+                            <td>@vacay.employeeId</td>
+                            <td>@vacay.employeeFirstName</td>
+                            <td>@vacay.employeeLastName</td>
+                        </tr>
+                    
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 @section Styles{
     <!-- Custom styles for this template -->
     <link href="~/Content/dashboard.css" rel="stylesheet">

@@ -122,33 +122,13 @@
                 var scheduleArr = [];
                 var flag = true;
 
-<<<<<<< HEAD
+
                 $('tbody').find('td[class="shift_data"]').each(function () {
                     if ($('select', this).val() == null) {
                         $('#warning').show().delay(3000).fadeOut();
                         flag = false;
                         return flag;
-=======
-                    if (flag) {
-                        $.ajax({
-                            type: 'POST',
-                            contentType: 'application/json; charset=utf-8',
-                            url: '@Url.Action("PostShifts")',
-                            datatype: 'json',
-                            data: JSON.stringify({
-                                "startDate": $('#startOfWeek').val(),
-                                "data": scheduleArr
-                            }),
-                            success: function (data) {
-                                if (data['success'] == 'success') {
-                                   location.reload();
-                                }
-                                else {
-                                    $('#error').show().delay(3000).fadeOut();
-                                }
-                            }
-                        });
->>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
+
                     }
 
                     scheduleArr.push({

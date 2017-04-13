@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shift_Scheduler.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -10,11 +11,9 @@ namespace Shift_Scheduler.Models
     // todo: only allow manager
     public class ManagerController : Controller
     {
-<<<<<<< HEAD
-        private ShiftContext db = new ShiftContext();
-=======
+
         private ApplicationDbContext db = new ApplicationDbContext();
->>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
+
 
 
         enum Days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
@@ -73,11 +72,8 @@ namespace Shift_Scheduler.Models
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
 
-<<<<<<< HEAD
-=======
             //return Json(data);
 
->>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
             foreach (ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))
@@ -166,103 +162,37 @@ namespace Shift_Scheduler.Models
                       from s in e.shifts
                       where s.dayOfTheWeek == "Monday"
                       select e;
-
-            var res2 = (from s in db.Shifts
-                        from e in s.employee
-                        select new { s.shiftId, s.dayOfTheWeek, s.shiftType }).ToArray();
-
-            for (int j = 0; j < res2.Length; j++)
+            var res3 = from v in db.VacationRequests
+                       from e in db.Employees
+                       select v;
+           ViewBag.vacation = res3.ToList();
+            foreach (var s in db.shiftChangeRequest)
             {
-                string temp = res2[j].ToString();
-                temp = temp.Trim(new Char[] { '{', '}' });
-                String[] split = temp.Split(',');
-                // shift id value
-                String[] shiftID = split[0].Split(',');
-                // day of the weeek value
-                String[] day = split[1].Split('=');
-                // type of shift
-                String[] type = split[2].Split('=');
-
-                string dayWeek = day[1].Trim();
-                string sType = type[1].Trim();
-
-                string deleteId = "";
-
-                for (int k = 0; k < days.Length; k++)
-                {
-                    int offset = 0;
-                    if (dayWeek == days[k])
-                    {
-                        deleteId = days[k].Substring(0, 3);
-                        //days[k] = null;
-                        List<string> tmp = days.OfType<string>().ToList();
-                        tmp.RemoveAt(k);
-                        days = tmp.ToArray();
-                        for (int l = 0; l < dayType.Length; l++)
-                        {
-                            if (type[1] == dayType[l])
+                var res2 = (from sc in db.shiftChangeRequest
+                            from e in db.Employees
+                            where e.employeeId == s.currentWorkingEmp.employeeId
+                       
+                            select new DashBoardViewModel
                             {
-                                //offset for dayId
-                                offset = l;
-                                //delete the element in the array
-                                deleteId = dayType[k].Substring(0, 3);
-                                List<string> typeShift = dayType.OfType<string>().ToList();
-                                typeShift.RemoveAt(l);
-                                dayType = typeShift.ToArray();
-                            }
-                        }
+                                shiftChangeRequestId = sc.shiftChangeRequestId,
+                                shiftApproval = sc.shiftApproval,
+                                shiftScheduleID = sc.shiftScheduleID,
+                                currentWorkingEmpFirstName = sc.currentWorkingEmp.firstName,
+                                currentWorkingEmpLastName = sc.currentWorkingEmp.lastName,
+                                newWorkingEmpFirstName = sc.newWorkingEmp.firstName,
+                                newWorkingEmpLastName = sc.currentWorkingEmp.lastName,
+                                currentWorkingEmpId = sc.currentWorkingEmp.employeeId,
+                                newWorkingEmpId = sc.newWorkingEmp.employeeId,
+                               
+                               
+                            }).ToList();
+                ViewBag.empAvail = res.ToList();
+                return View(res2);
 
-
-                        for (; offset < dayId.Length;)
-                        {
-                            if (deleteId == dayId[offset])
-                            {
-                                List<string> tempId = dayId.OfType<string>().ToList();
-                                tempId.RemoveAt(offset);
-                                dayId = tempId.ToArray();
-                            }
-                            offset += 3;
-                        }
-                    }
-                }
             }
-<<<<<<< HEAD
-
-            var res3 = (from v in db.vacation
-                        select new { v.vacationId, v.startDate, v.endDate, v.employeeId }).ToArray();
-            List<String> vacay = new List<String>();
-            for (int r = 0; r < res3.Length; r++)
-            {
-                string temp = res3[r].ToString();
-                temp = temp.Trim(new Char[] { '{', '}' });
-                String[] split = temp.Split(',');
-
-                String[] vacationID = split[0].Split('=');
-                // vacation start date
-                String[] startDate = split[1].Split('=');
-                // vacation end date
-                String[] endDate = split[2].Split('=');
-                String[] employeeId = split[3].Split('=');
-
-                string vId = vacationID[1].Trim();
-                string start = startDate[1].Trim();
-                string end = endDate[1].Trim();
-                string empId = employeeId[1].Trim();
-
-                vacay.Add(vId);
-                vacay.Add(start);
-                vacay.Add(end);
-                vacay.Add(empId);
-            }
-            ViewBag.vacation = vacay;
-=======
->>>>>>> 62768169325efe7e8dd883f824e182d534c2a614
-
-            ViewBag.shiftDay = days.ToList();
-            ViewBag.shiftType = dayType.ToList();
-            ViewBag.empAvail = res.ToList();
             return View();
         }
+            
 
         public ActionResult Report()
         {
