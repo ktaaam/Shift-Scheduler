@@ -30,7 +30,7 @@ namespace Shift_Scheduler.Models
         // GET: Manager
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Dashboard");
         }
 
         public ActionResult Shift()
@@ -68,9 +68,6 @@ namespace Shift_Scheduler.Models
         {
             var shifts = (from s in db.Shifts
                           select s.shiftId).ToList();
-
-            //return Json(data);
-
             foreach (ShiftEmp shift in data)
             {
                 if (shift.empId == null || !shifts.Contains(shift.shiftId))
