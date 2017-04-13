@@ -44,12 +44,23 @@ namespace Shift_Scheduler.Models
         {
             List<KeyValuePair<string, List<ScheduleEmp>>> output = new List<KeyValuePair<string, List<ScheduleEmp>>>();
 
+            var vac = (from e in db.Employees
+                       from v in e.vacationRequests
+                       where v.approvalStatus == "approved" && (v.dateStart <= DateTime.Now && v.dateEnd >= DateTime.Now)
+                       select e.employeeId).ToList();
+
             foreach (var shift in db.Shifts)
-            {
+            {                
                 var res = (from e in db.Employees
                            from s in e.shifts
                            where s.shiftId == shift.shiftId
                            select new { e.employeeId, e.firstName, e.lastName, e.phoneNumber }).ToList();
+
+                for(int i=res.Count-1;i>= 0;i--)
+                {
+                    if (vac.Contains(res[i].employeeId))
+                        res.RemoveAt(i);
+                }
 
                 List<ScheduleEmp> temp = new List<ScheduleEmp>();
                 foreach (var result in res)
@@ -275,6 +286,47 @@ namespace Shift_Scheduler.Models
         public ActionResult ChangeShift()
         {
             return View();
+        }
+
+        public ActionResult VacationRequest()
+        {
+            ViewData["Vacation"] = (from v in db.VacationRequests
+                                    where v.approvalStatus == "pending"
+                                    select v).ToList();
+
+            return View();
+        }
+
+        public ActionResult VacationApprove(int id)
+        {
+            var res = (from v in db.VacationRequests
+                       where v.vacationID == id
+                       select v).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.approvalStatus = "approved";                               
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("VacationRequest");
+        }
+
+        public ActionResult VacationDeny(int id)
+        {
+            var res = (from v in db.VacationRequests
+                       where v.vacationID == id
+                       select v).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.approvalStatus = "denied";
+                db.Entry(res).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("VacationRequest");
         }
 
         public JsonResult GetShiftChange()

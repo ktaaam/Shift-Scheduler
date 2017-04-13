@@ -35,8 +35,8 @@ namespace Shift_Scheduler.Controllers
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                return Redirect("/login");
-            
+                return RedirectToAction("login", "Account");
+
 
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName;
             ViewData["EmpId"] = employee.employeeId;
@@ -65,7 +65,7 @@ namespace Shift_Scheduler.Controllers
             if (empid > 0)
                 this.employee = db.Employees.Find(empid);
             else
-                return Redirect("/login");
+                return RedirectToAction("login", "Account");
 
             var res = (from s in db.ShiftSchedules
                        from c in db.Shifts
@@ -111,12 +111,12 @@ namespace Shift_Scheduler.Controllers
             return RedirectToAction("index");
         }
 
-        public ActionResult VacationRequest(int id = 0)
+        public ActionResult VacationRequest(int id)
         {
             if (id > 0)
                 this.employee = db.Employees.Find(id);
             else
-                return Redirect("/login");
+                return RedirectToAction("login", "Account");
 
             if (employee == null)
                 return HttpNotFound();
@@ -126,6 +126,27 @@ namespace Shift_Scheduler.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult VacationRequest(DateTime datestart, DateTime dateend)
+        {
+            int empid = 1;
+
+            if (datestart >= DateTime.Now && dateend >= datestart)
+            {
+                Vacation vaca = new Vacation();
+                vaca.approvalStatus = "pending";
+                vaca.dateStart = datestart;
+                vaca.dateEnd = dateend;
+                vaca.empVacationRequestID = empid;
+                vaca.Employees = (from e in db.Employees
+                                  where e.employeeId == empid
+                                  select e).FirstOrDefault();
+
+                db.VacationRequests.Add(vaca);
+                db.SaveChanges();
+            }
+            return RedirectToAction("index");
+        }
         public ActionResult ClockIn()
         {
             int empid = 1;            

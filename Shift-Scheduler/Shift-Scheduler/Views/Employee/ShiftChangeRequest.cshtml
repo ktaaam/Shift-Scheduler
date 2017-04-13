@@ -3,23 +3,25 @@
     ViewBag.Title = "ShiftChangeRequest";
 }
 
-<h2>Shift Change Request</h2>
+<div class="container body-content">
+    <h2>Shift Change Request</h2>
 
-@using (Html.BeginForm("ShiftChangeRequest", "Employee", FormMethod.Post))
-{
-    <input name="shiftscheduleid" value="@ViewData["ShiftSchedule"]" type="hidden" />
-    <p>
-        Changing shift from: <b>@ViewData["EmployeeName"]</b> to
-        <select name="new_emp">
-            @foreach (var emp in ViewData["Employees"] as List<Shift_Scheduler.Models.Employee>)
-            {
-                <option value="@emp.employeeId">@emp.firstName @emp.lastName</option>
-            }
-        </select>
-    </p>
-    <input type="submit" />
-}
+    @using (Html.BeginForm("ShiftChangeRequest", "Employee", FormMethod.Post))
+    {
+        <input name="shiftscheduleid" value="@ViewData["ShiftSchedule"]" type="hidden" />
+        <p>
+            Changing shift from: <b>@ViewData["EmployeeName"]</b> to
+            <select name="new_emp">
+                @foreach (var emp in ViewData["Employees"] as List<Shift_Scheduler.Models.Employee>)
+                {
+                    <option value="@emp.employeeId">@emp.firstName @emp.lastName</option>
+                }
+            </select>
+        </p>
+        <input type="submit" />
+    }
 
-<div>
-    @Html.ActionLink("Back to Dash", "Index")
-</div>
+    <div>
+        @Html.ActionLink("Back to Dash", "Index")
+    </div>
+    </div>

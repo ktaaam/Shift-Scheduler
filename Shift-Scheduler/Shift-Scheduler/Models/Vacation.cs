@@ -17,7 +17,7 @@ namespace Shift_Scheduler.Models
 
         public DateTime dateEnd { get; set; }
 
-        public Boolean approvalStatus { get; set; }
+        public string approvalStatus { get; set; }
 
         public int empVacationRequestID { get; set; }
 
