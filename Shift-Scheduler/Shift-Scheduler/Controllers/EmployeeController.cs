@@ -21,9 +21,10 @@ namespace Shift_Scheduler.Controllers
                 return RedirectToAction("login","Account");
 
             
-            
-            ViewData["EmpShifts"] = employee.shiftSchedules;
+            if(employee == null)
+                return RedirectToAction("login", "Account");
 
+            ViewData["EmpShifts"] = employee.shiftSchedules;
             ViewData["EmpName"] = employee.firstName + " " + employee.lastName ;
             ViewData["EmpId"] = employee.employeeId;
             return View();
@@ -125,20 +126,46 @@ namespace Shift_Scheduler.Controllers
             return View();
         }
 
-        public ActionResult ClockIn(int id)
+        public ActionResult ClockIn()
         {
+            int empid = 1;            
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
-            return View();
+            var res = (from c in db.Clocks
+                       where c.empClockID == empid && c.clockOut == null && c.clockIn != null
+                       select c).FirstOrDefault();
+
+            if(res == null)
+            {
+                Clock clockin = new Clock();
+                clockin.Employees = (from e in db.Employees
+                                     where e.employeeId == empid
+                                     select e).FirstOrDefault();
+                clockin.empClockID = empid;
+                clockin.clockIn = DateTime.Now;
+
+                db.Clocks.Add(clockin);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("index");
         }
 
-        public ActionResult ClockOut(int id)
+        public ActionResult ClockOut()
         {
+            int empid = 1;
 
-            ViewData["EmployeeName"] = employee.firstName + " " + employee.lastName;
-            ViewData["EmpId"] = employee.employeeId;
-            return View();
+            var res = (from c in db.Clocks
+                       where c.empClockID == empid && c.clockIn != null && c.clockOut == null
+                       select c).FirstOrDefault();
+
+            if (res != null)
+            {
+                res.clockOut = DateTime.Now;
+
+                db.Entry(res).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }            
+            return RedirectToAction("index");
         }
     }
 }

@@ -2,6 +2,7 @@ delete from Employees;
 delete from shifts;
 delete from ShiftsEmployees;
 delete from ShiftSchedules;
+SET IDENTITY_INSERT Employees ON
 
 insert into Shifts values('SunMor','Sunday','Morning');
 insert into Shifts values('SunEve','Sunday','Evening');
