@@ -96,22 +96,12 @@
             $('#updateTable').click(function () {
                 var scheduleArr = [];
                 var flag = true;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 18f93d955a8c775e1634a9acd9a4980aede8d5bf
                 $('tbody').find('td[class="shift_data"]').each(function () {
                     if ($('select', this).val() == null) {
                         $('#warning').show().delay(3000).fadeOut();
                         flag = false;
                         return flag;
-<<<<<<< HEAD
-
-=======
->>>>>>> 18f93d955a8c775e1634a9acd9a4980aede8d5bf
                     }
-
                     scheduleArr.push({
                         empId: $('select', this).val(),
                         shiftId: $(this).attr('name')
